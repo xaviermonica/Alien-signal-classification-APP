@@ -1,0 +1,51 @@
+brightpixel,narrowband,narrowbanddrd,noise,Stars Type,Remarks,Signal Frequency(MHz),Signal Duration(seconds),Signal Origin 
+0.75,1 ,0.9,0.5,7,Safe : signal from natural sources,1420 ,5 ,0
+0.6,0.8,0.85,0.4,6,Safe : signal from natural sources,1300 ,3 ,0
+0.9,0.95,0.85,0.6,7,Warning : Alien signal,1500 ,10 ,0
+0.8,0.7,0.75,0.4,11,Safe : signal from natural sources,1367 ,7 ,0
+0.7,0.9,0.8,0.55,6,Warning : Alien signal,1550 ,8 ,0
+0.85,0.65,0.7,0.45,1,Safe : signal from natural sources,1485 ,6 ,0
+0.55,0.75,0.8,0.6,2,Warning : Alien signal,1600 ,12 ,0
+0.78,0.88,0.92,0.52,7,Safe : signal from natural sources,1440 ,4 ,1
+0.92,0.78,0.85,0.68,11,Safe : signal from natural sources,1380 ,9 ,0
+0.67,0.82,0.88,0.58,6,Warning : Alien signal,1525 ,7 ,0
+0.81 ,0.71 ,0.79,0.42,1,Safe : signal from natural sources,1490 ,5 ,0
+0.62,0.87,0.84,0.63,2,Safe : signal from natural sources,1375 ,8 ,0
+0.89,0.94,0.88,0.67,7,Warning : Alien signal,1590 ,11 ,0
+0.73,0.84,0.78,0.5,6,Safe : signal from natural sources,1310 ,6 ,1
+0.77,0.69,0.76,0.38,11,Safe : signal from natural sources,1450 ,3 ,0
+0.68,0.91 ,0.82,0.55,2,Safe : signal from natural sources,1435 ,7 ,0
+0.94,0.79,0.87,0.72,1,Warning : Alien signal,1575 ,9 ,0
+0.79,0.83,0.77,0.48,7,Safe : signal from natural sources,1325 ,5 ,0
+0.74,0.72,0.74,0.41 ,11,Safe : signal from natural sources,1350 ,4 ,0
+0.63,0.88,0.86,0.59,6,Warning : Alien signal,1580 ,8 ,0
+0.82,0.73,0.79,0.53,2,Warning : Alien signal,1560 ,10 ,0
+0.76,0.85,0.81 ,0.47,1,Safe : signal from natural sources,1400 ,6 ,0
+0.71 ,0.92,0.83,0.57,7,Safe : signal from natural sources,1330 ,7 ,1
+0.88,0.77,0.86,0.62,6,Warning : Alien signal,1610 ,11 ,0
+0.65,0.89,0.87,0.56,11,Safe : signal from natural sources,1390 ,8 ,0
+0.72,0.76,0.73,0.39,7,Safe : signal from natural sources,1340 ,4 ,0
+0.87,0.74,0.82,0.65,6,Warning : Alien signal,1530 ,9 ,0
+0.69,0.86,0.88,0.61 ,2,Safe : signal from natural sources,1415 ,7 ,0
+0.83,0.81,0.78,0.49,1,Warning : Alien signal,1545 ,8 ,0
+0.76,0.78,0.75,0.44,11,Safe : signal from natural sources,1378 ,5 ,0
+0.79,0.84,0.77,0.48,7,Warning : Alien signal,1568 ,12 ,0
+0.74,0.77,0.72,0.43,6,Safe : signal from natural sources,1398 ,7 ,0
+0.68,0.93,0.84,0.59,11,Safe : signal from natural sources,1372 ,6 ,1
+0.85,0.67,0.73,0.46,2,Warning : Alien signal,1585 ,11 ,1
+0.76,0.89,0.85,0.58,1,Warning : Alien signal,1425 ,9 ,1
+0.81 ,0.75,0.79,0.5,7,Safe : signal from natural sources,1356 ,8 ,0
+0.66,0.91 ,0.86,0.57,6,Warning : Alien signal,1595 ,10 ,0
+0.73,0.82,0.79,0.51,11,Safe : signal from natural sources,1360 ,7 ,1
+0.78,0.72,0.75,0.45,2,Safe : signal from natural sources,1405 ,8 ,0
+0.88,0.93,0.91 ,0.69,1,Safe : signal from natural sources,1442 ,5 ,0
+0.75,0.78,0.74,0.42,7,Warning : Alien signal,1572 ,9 ,1
+0.82,0.76,0.81 ,0.54,6,Warning : Alien signal,1602 ,12 ,0
+0.69,0.85,0.83,0.56,11,Safe : signal from natural sources,1385 ,6 ,0
+0.77,0.71 ,0.76,0.49,2,Safe : signal from natural sources,1420 ,7 ,1
+0.84,0.76,0.81 ,0.52,1,Warning : Alien signal,1458 ,8 ,0
+0.79,0.87,0.84,0.61 ,7,Safe : signal from natural sources,1348 ,10 ,0
+0.71 ,0.83,0.77,0.5,6,Warning : Alien signal,1618 ,11 ,0
+0.67,0.94,0.86,0.58,11,Safe : signal from natural sources,1398 ,7 ,1
+0.86,0.79,0.83,0.63,2,Warning : Alien signal,1576 ,12 ,0
+0.72,0.88,0.86,0.62,1,Warning : Alien signal,1435 ,9 ,0
