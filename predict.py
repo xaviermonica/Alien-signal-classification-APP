@@ -3,12 +3,7 @@ import pandas as pd
 import joblib
 
 # Load the trained model
-try:
-    model = joblib.load("RF alien signal.pkl")
-except FileNotFoundError:
-    st.error("Error: The model file 'RF alien signal.pkl' was not found. Please check the file path.")
-except Exception as e:
-    st.error(f"An error occurred while loading the model: {e}")
+model = joblib.load("RF alien signal.pkl")
 
 st.title("🚀 Predict")
 
@@ -44,23 +39,9 @@ st.subheader('User Input Features')
 st.write(input_df)
 
 # Make prediction
-try:
-    prediction = model.predict(input_df)
-except Exception as e:
-    st.error(f"An error occurred while making the prediction: {e}")
-    prediction = [None]
+prediction = model.predict(input_df)
 
 # Display the prediction result
 st.subheader('Prediction Result')
-if prediction[0] is not None:
-    prediction_message = "📡 It's a safe signal from natural sources." if prediction[0] == 'Safe : signal from natural sources' else "🛸 Warning: potential alien signal detected!"
-    st.markdown(f"<div class='prediction-box'>{prediction_message}</div>", unsafe_allow_html=True)
-else:
-    st.error("Unable to make a prediction. Please check the model and input data.")
-
-# Add more details or a description below the result
-st.markdown("""
-<div class="note-box">
-    <strong>Note:</strong> The classification is based on the model's analysis of features such as bright pixel, narrowband, narrowband DRD, noise, stars type, signal frequency, duration, and origin.
-</div>
-""", unsafe_allow_html=True)
+prediction_message = "📡 It's a safe signal from natural sources." if prediction[0] == 'Safe : signal from natural sources' else "🛸 Warning: potential alien signal detected!"
+st.markdown(f"<div class='prediction-box'>{prediction_message}</div>", unsafe_allow_html=True)
