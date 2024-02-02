@@ -3,7 +3,7 @@ import pandas as pd
 import joblib
 
 # Load the trained model
-model = joblib.load("C:\\imp\\ml JUPYTER\\MY ML PROJECTS(BOOK)\\3.Deep learning\\ANN\\Recreation\\space\\Alien signal\\RF alien signal.pkl")
+model = joblib.load("RF alien signal.pkl")
 # Title of the web app
 st.set_page_config(page_title="Signal Classification App", page_icon="📡🛸", layout="wide")
 st.title("Signal Classification App")
