@@ -1,29 +1,25 @@
 import streamlit as st
 
-# Set up the sidebar
-st.sidebar.title("Navigation")
-page = st.sidebar.selectbox("Choose a page", [
-    "🚀 Predict",
-    "✨ Recommend",
-    "📊 Visualize",
-    "🔍 Analyze",
-    "🔭 Insights",
-    "📝 Feedback",
-    "📚 About"
-])
+# Define pages and their corresponding functions
+PAGES = {
+    "🚀 Predict": "predict.py",
+    "✨ Recommend": "recommend.py",
+    "📊 Visualize": "visualize.py",
+    "🔍 Analyze": "analyze.py",
+    "🔭 Insights": "insights.py",
+    "📝 Feedback": "feedback.py",
+    "📚 About": "about.py",
+}
 
-# Load the selected page
-if page == "🚀 Predict":
-    import predict
-elif page == "✨ Recommend":
-    import recommend
-elif page == "📊 Visualize":
-    import visualize
-elif page == "🔍 Analyze":
-    import analyze
-elif page == "🔭 Insights":
-    import insights
-elif page == "📝 Feedback":
-    import feedback
-elif page == "📚 About":
-    import about
+def main():
+    st.set_page_config(page_title="Signal Classification App", page_icon="📡🛸", layout="wide")
+    
+    st.sidebar.title("Navigation")
+    selection = st.sidebar.radio("Go to", list(PAGES.keys()))
+
+    # Load the selected page
+    with open(PAGES[selection]) as f:
+        exec(f.read())
+
+if __name__ == "__main__":
+    main()
