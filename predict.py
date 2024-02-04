@@ -3,9 +3,17 @@ import pandas as pd
 import joblib
 
 # Load the trained model
-model = joblib.load("RF alien signal.pkl")
+try:
+    model = joblib.load("RF alien signal.pkl")
+except FileNotFoundError:
+    st.error("Model file 'RF alien signal.pkl' not found.")
+    model = None
 
 def app():
+    if model is None:
+        st.warning("Model not loaded. Please check the file path.")
+        return
+
     st.title("🚀 Predict")
 
     # Sidebar for user input
@@ -37,13 +45,14 @@ def app():
     st.subheader('User Input Features')
     st.write(features)
 
-    # Make prediction
-    prediction = model.predict(features)
+    if model is not None:
+        # Make prediction
+        prediction = model.predict(features)
 
-    # Display the prediction result
-    st.subheader('Prediction Result')
-    prediction_message = "📡 It's a safe signal from natural sources." if prediction[0] == 'Safe : signal from natural sources' else "🛸 Warning: potential alien signal detected!"
-    st.markdown(f"<div class='prediction-box'>{prediction_message}</div>", unsafe_allow_html=True)
+        # Display the prediction result
+        st.subheader('Prediction Result')
+        prediction_message = "📡 It's a safe signal from natural sources." if prediction[0] == 'Safe : signal from natural sources' else "🛸 Warning: potential alien signal detected!"
+        st.markdown(f"<div class='prediction-box'>{prediction_message}</div>", unsafe_allow_html=True)
 
 # Ensure the function `app()` is called when this file is executed
 if __name__ == "__main__":
