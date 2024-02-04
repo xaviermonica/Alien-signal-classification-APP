@@ -14,5 +14,4 @@ torchvision
 pytorch-lightning
 statsmodels
 plotly
-joblib
-streamlit
+streamlit==1.38.0
