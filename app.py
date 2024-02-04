@@ -1,5 +1,5 @@
 import streamlit as st
-
+import pandas as pd
 # Define pages and their corresponding functions
 PAGES = {
     "🚀 Predict": "predict.py",
