@@ -1,6 +1,6 @@
 import streamlit as st
 
-# Define pages and their corresponding functions
+# Define pages and their corresponding script filenames
 PAGES = {
     "🚀 Predict": "predict.py",
     "✨ Recommend": "recommend.py",
@@ -15,9 +15,9 @@ def main():
     # Set the page configuration
     st.set_page_config(page_title="Signal Classification App", page_icon="📡🛸", layout="wide")
     
-    # Sidebar for navigation
+    # Sidebar for navigation with a dropdown menu
     st.sidebar.title("Navigation")
-    selection = st.sidebar.radio("Go to", list(PAGES.keys()))
+    selection = st.sidebar.selectbox("Select a page", list(PAGES.keys()))
 
     # Load the selected page
     page_file = PAGES[selection]
