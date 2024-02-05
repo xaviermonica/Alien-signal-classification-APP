@@ -1,50 +1,28 @@
 import streamlit as st
-import pandas as pd
-import joblib
 
-# Load the trained model
-model = joblib.load("RF alien signal.pkl")
+# Define pages and their corresponding functions
+PAGES = {
+    "🚀 Predict": "predict.py",
+    "✨ Recommend": "recommend.py",
+    "📊 Visualize": "visualize.py",
+    "🔍 Analyze": "analyze.py",
+    "🔭 Insights": "insights.py",
+    "📝 Feedback": "feedback.py",
+    "📚 About": "about.py",
+}
 
-def app():
-    st.title("🚀 Predict")
-
-    # Sidebar for user input
-    st.sidebar.header('User Input Parameters')
+def main():
+    # Set the page configuration
+    st.set_page_config(page_title="Signal Classification App", page_icon="📡🛸", layout="wide")
     
-    brightpixel = st.sidebar.slider("Bright Pixel", 0.0, 1.0, 0.5)
-    narrowband = st.sidebar.slider("Narrowband", 0.0, 1.0, 0.5)
-    narrowbanddrd = st.sidebar.slider("Narrowband DRD", 0.0, 1.0, 0.5)
-    noise = st.sidebar.slider("Noise", 0.0, 1.0, 0.5)
-    stars_type = st.sidebar.slider("Stars Type", 0, 20, 10)
-    signal_frequency = st.sidebar.slider("Signal Frequency (MHz)", 1000, 2000, 1400)
-    signal_duration = st.sidebar.slider("Signal Duration (seconds)", 1, 20, 10)
-    signal_origin = st.sidebar.slider("Signal Origin", 0, 5, 0)
+    # Sidebar for navigation
+    st.sidebar.title("Navigation")
+    selection = st.sidebar.radio("Go to", list(PAGES.keys()))
 
-    data = {
-        'brightpixel': brightpixel,
-        'narrowband': narrowband,
-        'narrowbanddrd': narrowbanddrd,
-        'noise': noise,
-        'Stars Type': stars_type,
-        'Signal Frequency(MHz)': signal_frequency,
-        'Signal Duration(seconds)': signal_duration,
-        'Signal Origin ': signal_origin
-    }
+    # Load the selected page
+    page_file = PAGES[selection]
+    with open(page_file) as f:
+        exec(f.read(), globals())
 
-    features = pd.DataFrame(data, index=[0])
-
-    # Display user input
-    st.subheader('User Input Features')
-    st.write(features)
-
-    # Make prediction
-    prediction = model.predict(features)
-
-    # Display the prediction result
-    st.subheader('Prediction Result')
-    prediction_message = "📡 It's a safe signal from natural sources." if prediction[0] == 'Safe : signal from natural sources' else "🛸 Warning: potential alien signal detected!"
-    st.markdown(f"<div class='prediction-box'>{prediction_message}</div>", unsafe_allow_html=True)
-
-# Ensure the function `app()` is called when this file is executed
 if __name__ == "__main__":
-    app()
+    main()
