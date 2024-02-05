@@ -2,16 +2,19 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-# Load the trained model
+# Attempt to load the trained model
 try:
     model = joblib.load("RF alien signal.pkl")
 except FileNotFoundError:
-    st.error("Model file 'RF alien signal.pkl' not found.")
+    st.error("Model file 'RF alien signal.pkl' not found. Please check the file path.")
+    model = None
+except Exception as e:
+    st.error(f"An error occurred while loading the model: {e}")
     model = None
 
 def app():
     if model is None:
-        st.warning("Model not loaded. Please check the file path.")
+        st.warning("Model is not loaded. Please check the error messages above.")
         return
 
     st.title("🚀 Predict")
