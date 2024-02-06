@@ -47,7 +47,7 @@ signal_types = st.sidebar.multiselect(
 )
 
 # Slider for frequency range with tooltip
-st.sidebar.slider(
+min_frequency, max_frequency = st.sidebar.slider(
     "📡 Select Frequency Range (MHz)", 
     int(data["Signal Frequency(MHz)"].min()), 
     int(data["Signal Frequency(MHz)"].max()), 
@@ -71,14 +71,6 @@ noise_level = st.sidebar.slider(
     float(data["noise"].max()), 
     0.5, 
     help="Set the maximum acceptable noise level for signals."
-)
-# Slider for frequency range with tooltip
-min_frequency, max_frequency = st.sidebar.slider(
-    "📡 Select Frequency Range (MHz)", 
-    int(data["Signal Frequency(MHz)"].min()), 
-    int(data["Signal Frequency(MHz)"].max()), 
-    (1300, 1550), 
-    help="Adjust the slider to filter signals based on frequency."
 )
 
 # Filter data based on user inputs
