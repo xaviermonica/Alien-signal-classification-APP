@@ -6,7 +6,7 @@ import plotly.express as px
 data_path = 'narrowband signals.csv'
 data = pd.read_csv(data_path)
 
-# Custom CSS for pro look
+# Custom CSS for a professional look
 st.markdown("""
     <style>
     .main-title {
@@ -14,11 +14,13 @@ st.markdown("""
         font-size: 36px;
         color: #FF6347;
         font-weight: bold;
+        margin-bottom: 20px;
     }
     .sidebar-header {
         font-size: 20px;
         color: #4682B4;
         font-weight: bold;
+        margin-bottom: 10px;
     }
     .custom-box {
         background-color: #f0f0f0;
@@ -31,6 +33,16 @@ st.markdown("""
         color: #FF6347;
         font-weight: bold;
         margin-top: 50px;
+    }
+    .chart-title {
+        color: #4169E1;
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+    .recommendation-title {
+        color: #FF1493;
+        font-size: 24px;
+        margin-bottom: 10px;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -52,7 +64,7 @@ min_frequency, max_frequency = st.sidebar.slider(
     int(data["Signal Frequency(MHz)"].min()), 
     int(data["Signal Frequency(MHz)"].max()), 
     (1300, 1550), 
-    help="Adjust the slider to filter signals based on frequency."
+    help="Adjust the slider to filter signals based on frequency range."
 )
 
 # Duration with expander for advanced info
@@ -83,7 +95,7 @@ filtered_data = data[
 # Filter by selected signal types
 if "Safe" in signal_types:
     filtered_data = filtered_data[filtered_data["Remarks"].str.contains("Safe")]
-elif "Warning" in signal_types:
+if "Warning" in signal_types:
     filtered_data = filtered_data[filtered_data["Remarks"].str.contains("Warning")]
 
 # Display filtered data with expandable section for more details
@@ -91,7 +103,7 @@ with st.expander("📋 Filtered Signals Data"):
     st.dataframe(filtered_data)
 
 # Interactive scatter plot for signal visualization
-st.markdown("<h3 style='color: #4169E1;'>📊 Signal Visualization</h3>", unsafe_allow_html=True)
+st.markdown("<div class='chart-title'>📊 Signal Visualization</div>", unsafe_allow_html=True)
 chart_choice = st.selectbox(
     "Choose a visualization type:", 
     ["Frequency vs Noise", "Duration vs Noise", "Frequency vs Duration"]
@@ -111,7 +123,7 @@ else:
 st.plotly_chart(fig, use_container_width=True)
 
 # Dynamic recommendations section
-st.markdown("<h3 style='color: #FF1493;'>📝 Recommendations</h3>", unsafe_allow_html=True)
+st.markdown("<div class='recommendation-title'>📝 Recommendations</div>", unsafe_allow_html=True)
 if "Safe" in signal_types:
     st.success("✅ These signals are from natural sources. No action needed.")
     st.markdown("<p style='color: #32CD32;'>Proceed with further analysis. 🌿</p>", unsafe_allow_html=True)
