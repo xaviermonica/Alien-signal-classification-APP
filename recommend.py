@@ -2,6 +2,9 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+import numpy as np
+from sklearn.preprocessing import LabelEncoder
+from sklearn.ensemble import RandomForestClassifier
 
 # Load the dataset
 data_path = 'narrowband signals.csv'
@@ -52,6 +55,12 @@ st.markdown("""
     .feedback-form {
         background-color: #f0f0f0;
         padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+    .real-time {
+        background-color: #f5f5f5;
+        padding: 10px;
         border-radius: 10px;
         margin-bottom: 20px;
     }
@@ -167,6 +176,33 @@ else:
     )
 
 st.plotly_chart(fig, use_container_width=True)
+
+# Real-Time Updates
+st.markdown("<div class='real-time'><h3>⏱ Real-Time Updates</h3></div>", unsafe_allow_html=True)
+if st.button('Reload Data'):
+    data = pd.read_csv(data_path)
+    st.success('Data reloaded successfully!')
+
+# Signal Classification
+st.markdown("<div class='custom-box'><h3>🔍 Signal Classification</h3></div>", unsafe_allow_html=True)
+# Simple classification model setup
+if 'Signal Classification' in st.sidebar.radio("🧩 Additional Features", ["None", "Signal Classification"]):
+    le = LabelEncoder()
+    data['Remarks'] = le.fit_transform(data['Remarks'])
+    model = RandomForestClassifier(n_estimators=100, random_state=42)
+    X = data[['Signal Frequency(MHz)', 'Signal Duration(seconds)', 'noise']]
+    y = data['Remarks']
+    model.fit(X, y)
+    
+    st.subheader("Classify New Signal")
+    frequency = st.number_input('Signal Frequency (MHz)', min_value=0)
+    duration = st.number_input('Signal Duration (seconds)', min_value=0)
+    noise = st.number_input('Noise Level', min_value=0.0)
+    
+    if st.button('Classify Signal'):
+        prediction = model.predict([[frequency, duration, noise]])
+        class_label = le.inverse_transform(prediction)[0]
+        st.write(f"The signal is classified as: **{class_label}**")
 
 # Feedback Form
 
