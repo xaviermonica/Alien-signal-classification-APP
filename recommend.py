@@ -2,9 +2,6 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-import seaborn as sns
-import matplotlib.pyplot as plt
-import io
 
 # Load the dataset
 data_path = 'narrowband signals.csv'
@@ -52,10 +49,11 @@ st.markdown("""
         font-size: 18px;
         color: #4682B4;
     }
-    .heatmap-container {
+    .feedback-form {
         background-color: #f0f0f0;
         padding: 20px;
         border-radius: 10px;
+        margin-bottom: 20px;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -137,7 +135,7 @@ st.download_button(
 st.markdown("<div class='chart-title'>📊 Signal Visualization</div>", unsafe_allow_html=True)
 chart_choice = st.selectbox(
     "Choose a visualization type:", 
-    ["Frequency vs Noise", "Duration vs Noise", "Frequency vs Duration", "3D Scatter", "Heatmap"]
+    ["Frequency vs Noise", "Duration vs Noise", "Frequency vs Duration", "3D Scatter"]
 )
 
 # Dynamic charts based on user selection
@@ -150,7 +148,7 @@ elif chart_choice == "Duration vs Noise":
 elif chart_choice == "Frequency vs Duration":
     fig = px.scatter(filtered_data, x="Signal Frequency(MHz)", y="Signal Duration(seconds)", color="Remarks", 
                      title="Signal Frequency vs Duration", labels={"Signal Duration(seconds)": "Duration (s)"})
-elif chart_choice == "3D Scatter":
+else:
     fig = go.Figure(data=[go.Scatter3d(
         x=filtered_data["Signal Frequency(MHz)"],
         y=filtered_data["Signal Duration(seconds)"],
@@ -167,19 +165,24 @@ elif chart_choice == "3D Scatter":
             zaxis_title='Noise Level'
         )
     )
-elif chart_choice == "Heatmap":
-    # Create a heatmap
-    fig, ax = plt.subplots(figsize=(10, 6))
-    heatmap_data = filtered_data.pivot_table(index="Signal Duration(seconds)", columns="Signal Frequency(MHz)", values="noise", aggfunc='mean')
-    sns.heatmap(heatmap_data, cmap="YlGnBu", annot=True, ax=ax)
-    st.pyplot(fig)
 
-# Correlation Analysis
-st.markdown("<div class='custom-box'><h3>🔍 Correlation Analysis</h3></div>", unsafe_allow_html=True)
-correlation_matrix = filtered_data[['Signal Frequency(MHz)', 'Signal Duration(seconds)', 'noise']].corr()
-fig, ax = plt.subplots()
-sns.heatmap(correlation_matrix, annot=True, cmap="coolwarm", ax=ax)
-st.pyplot(fig)
+st.plotly_chart(fig, use_container_width=True)
+
+# Feedback Form
+st.markdown("<div class='feedback-form'><h3>📝 Provide Your Feedback</h3></div>", unsafe_allow_html=True)
+with st.form(key='feedback_form'):
+    st.text_input("Your Name", "")
+    st.text_area("Your Feedback", "")
+    st.form_submit_button("Submit Feedback")
+
+# Dynamic recommendations section
+st.markdown("<div class='recommendation-title'>📝 Recommendations</div>", unsafe_allow_html=True)
+if "Safe" in signal_types:
+    st.success("✅ These signals are from natural sources. No action needed.")
+    st.markdown("<p style='color: #32CD32;'>Proceed with further analysis. 🌿</p>", unsafe_allow_html=True)
+if "Warning" in signal_types:
+    st.warning("⚠️ These signals might indicate alien or abnormal activity.")
+    st.markdown("<p style='color: #FFA500;'>Proceed with caution. Further verification required. 🛸</p>", unsafe_allow_html=True)
 
 # Footer with custom CSS
 st.markdown("<hr>", unsafe_allow_html=True)
