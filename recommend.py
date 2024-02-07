@@ -178,12 +178,16 @@ else:
 st.plotly_chart(fig, use_container_width=True)
 
 # Real-Time Updates
-
+st.markdown("<div class='real-time'><h3>⏱ Real-Time Updates</h3></div>", unsafe_allow_html=True)
+if st.button('Reload Data'):
+    data = pd.read_csv(data_path)
+    st.success('Data reloaded successfully!')
 
 # Signal Classification
 st.markdown("<div class='custom-box'><h3>🔍 Signal Classification</h3></div>", unsafe_allow_html=True)
-# Simple classification model setup
-if 'Signal Classification' in st.sidebar.radio("🧩 Additional Features", ["None", "Signal Classification"]):
+classification_feature = st.slider("🔧 Signal Classification Feature", 0, 1, 0, format="Select: %d")
+
+if classification_feature == 1:
     le = LabelEncoder()
     data['Remarks'] = le.fit_transform(data['Remarks'])
     model = RandomForestClassifier(n_estimators=100, random_state=42)
@@ -202,6 +206,10 @@ if 'Signal Classification' in st.sidebar.radio("🧩 Additional Features", ["Non
         st.write(f"The signal is classified as: **{class_label}**")
 
 # Feedback Form
+st.markdown("<div class='feedback-form'><h3>📢 Feedback Form</h3></div>", unsafe_allow_html=True)
+with st.form(key='feedback_form'):
+    st.text_area("Your feedback:")
+    st.form_submit_button("Submit Feedback")
 
 # Dynamic recommendations section
 st.markdown("<div class='recommendation-title'>📝 Recommendations</div>", unsafe_allow_html=True)
