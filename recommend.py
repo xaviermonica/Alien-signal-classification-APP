@@ -169,11 +169,6 @@ else:
 st.plotly_chart(fig, use_container_width=True)
 
 # Feedback Form
-st.markdown("<div class='feedback-form'><h3>📝 Provide Your Feedback</h3></div>", unsafe_allow_html=True)
-with st.form(key='feedback_form'):
-    st.text_input("Your Name", "")
-    st.text_area("Your Feedback", "")
-    st.form_submit_button("Submit Feedback")
 
 # Dynamic recommendations section
 st.markdown("<div class='recommendation-title'>📝 Recommendations</div>", unsafe_allow_html=True)
