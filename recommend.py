@@ -178,10 +178,7 @@ else:
 st.plotly_chart(fig, use_container_width=True)
 
 # Real-Time Updates
-st.markdown("<div class='real-time'><h3>⏱ Real-Time Updates</h3></div>", unsafe_allow_html=True)
-if st.button('Reload Data'):
-    data = pd.read_csv(data_path)
-    st.success('Data reloaded successfully!')
+
 
 # Signal Classification
 st.markdown("<div class='custom-box'><h3>🔍 Signal Classification</h3></div>", unsafe_allow_html=True)
