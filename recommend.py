@@ -24,7 +24,7 @@ st.markdown("""
         margin-bottom: 10px;
     }
     .custom-box {
-        background-color: #f0f0f0;
+        background-color: #1a0606;
         padding: 20px;
         border-radius: 10px;
         margin-bottom: 20px;
