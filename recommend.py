@@ -177,11 +177,7 @@ else:
 
 st.plotly_chart(fig, use_container_width=True)
 
-# Real-Time Updates
-st.markdown("<div class='real-time'><h3>⏱ Real-Time Updates</h3></div>", unsafe_allow_html=True)
-if st.button('Reload Data'):
-    data = pd.read_csv(data_path)
-    st.success('Data reloaded successfully!')
+
 
 # Signal Classification
 st.markdown("<div class='custom-box'><h3>🔍 Signal Classification</h3></div>", unsafe_allow_html=True)
@@ -205,11 +201,7 @@ if classification_feature == 1:
         class_label = le.inverse_transform(prediction)[0]
         st.write(f"The signal is classified as: **{class_label}**")
 
-# Feedback Form
-st.markdown("<div class='feedback-form'><h3>📢 Feedback Form</h3></div>", unsafe_allow_html=True)
-with st.form(key='feedback_form'):
-    st.text_area("Your feedback:")
-    st.form_submit_button("Submit Feedback")
+
 
 # Dynamic recommendations section
 st.markdown("<div class='recommendation-title'>📝 Recommendations</div>", unsafe_allow_html=True)
