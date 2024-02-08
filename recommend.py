@@ -10,47 +10,48 @@ from sklearn.ensemble import RandomForestClassifier
 data_path = 'narrowband signals.csv'
 data = pd.read_csv(data_path)
 
-# Custom CSS for a professional look
+# Custom CSS for a professional and colorful look
 st.markdown("""
     <style>
     .main-title {
         text-align: center;
         font-size: 36px;
-        color: #FF6347;
+        color: #FF6347; /* Tomato */
         font-weight: bold;
         margin-bottom: 20px;
     }
     .sidebar-header {
         font-size: 20px;
-        color: #4682B4;
+        color: #4682B4; /* Steel Blue */
         font-weight: bold;
         margin-bottom: 10px;
     }
     .custom-box {
-        background-color: #1a0606;
+        background-color: #282c34; /* Dark Gray */
         padding: 20px;
         border-radius: 10px;
         margin-bottom: 20px;
+        color: #61dafb; /* Light Blue */
     }
     .footer {
         text-align: center;
-        color: #FF6347;
+        color: #FF6347; /* Tomato */
         font-weight: bold;
         margin-top: 50px;
     }
     .chart-title {
-        color: #4169E1;
+        color: #4169E1; /* Royal Blue */
         font-size: 24px;
         margin-bottom: 10px;
     }
     .recommendation-title {
-        color: #FF1493;
+        color: #FF1493; /* Deep Pink */
         font-size: 24px;
         margin-bottom: 10px;
     }
     .data-summary {
         font-size: 18px;
-        color: #4682B4;
+        color: #4682B4; /* Steel Blue */
     }
     .feedback-form {
         background-color: #f0f0f0;
@@ -63,6 +64,17 @@ st.markdown("""
         padding: 10px;
         border-radius: 10px;
         margin-bottom: 20px;
+    }
+    .stButton>button {
+        background-color: #00bfff; /* Deep Sky Blue */
+        color: #ffffff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        cursor: pointer;
+    }
+    .stButton>button:hover {
+        background-color: #87ceeb; /* Sky Blue */
     }
     </style>
 """, unsafe_allow_html=True)
@@ -177,8 +189,6 @@ else:
 
 st.plotly_chart(fig, use_container_width=True)
 
-
-
 # Signal Classification
 st.markdown("<div class='custom-box'><h3>🔍 Signal Classification</h3></div>", unsafe_allow_html=True)
 classification_feature = st.radio("🔧 Enable Signal Classification", ["No", "Yes"])
@@ -200,9 +210,6 @@ if classification_feature == "Yes":
         prediction = model.predict([[frequency, duration, noise]])
         class_label = le.inverse_transform(prediction)[0]
         st.write(f"The signal is classified as: **{class_label}**")
-
-
-
 
 # Dynamic recommendations section
 st.markdown("<div class='recommendation-title'>📝 Recommendations</div>", unsafe_allow_html=True)
