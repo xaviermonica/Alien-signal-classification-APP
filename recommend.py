@@ -181,9 +181,9 @@ st.plotly_chart(fig, use_container_width=True)
 
 # Signal Classification
 st.markdown("<div class='custom-box'><h3>🔍 Signal Classification</h3></div>", unsafe_allow_html=True)
-classification_feature = st.slider("🔧 Signal Classification Feature", 0, 1, 0, format="Select: %d")
+classification_feature = st.radio("🔧 Enable Signal Classification", ["No", "Yes"])
 
-if classification_feature == 1:
+if classification_feature == "Yes":
     le = LabelEncoder()
     data['Remarks'] = le.fit_transform(data['Remarks'])
     model = RandomForestClassifier(n_estimators=100, random_state=42)
@@ -200,6 +200,7 @@ if classification_feature == 1:
         prediction = model.predict([[frequency, duration, noise]])
         class_label = le.inverse_transform(prediction)[0]
         st.write(f"The signal is classified as: **{class_label}**")
+
 
 
 
