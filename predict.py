@@ -2,14 +2,59 @@ import streamlit as st
 import pandas as pd
 import joblib
 
+# Custom CSS for a professional look
+st.markdown("""
+    <style>
+    .main-title {
+        text-align: center;
+        font-size: 36px;
+        color: #FF6347;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+    .sidebar-header {
+        font-size: 20px;
+        color: #4682B4;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+    .prediction-box {
+        background-color: #1a0606;
+        padding: 20px;
+        border-radius: 10px;
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .error-box {
+        background-color: #ffcccb;
+        padding: 20px;
+        border-radius: 10px;
+        color: #d8000c;
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .input-section {
+        background-color: #f5f5f5;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 # Attempt to load the trained model
 try:
-    model = joblib.load("RF alien signal.pkl")
+    model = joblib.load("RF_alien_signal.pkl")
 except FileNotFoundError:
-    st.error("Model file 'RF alien signal.pkl' not found. Please check the file path.")
+    st.markdown("<div class='error-box'>Model file 'RF_alien_signal.pkl' not found. Please check the file path.</div>", unsafe_allow_html=True)
     model = None
 except Exception as e:
-    st.error(f"An error occurred while loading the model: {e}")
+    st.markdown(f"<div class='error-box'>An error occurred while loading the model: {e}</div>", unsafe_allow_html=True)
     model = None
 
 def app():
@@ -17,11 +62,11 @@ def app():
         st.warning("Model is not loaded. Please check the error messages above.")
         return
 
-    st.title("🚀 Predict")
+    st.markdown("<h1 class='main-title'>🚀 Signal Classification Prediction</h1>", unsafe_allow_html=True)
+
+    st.sidebar.header('🔧 User Input Parameters')
 
     # Sidebar for user input
-    st.sidebar.header('User Input Parameters')
-    
     brightpixel = st.sidebar.slider("Bright Pixel", 0.0, 1.0, 0.5)
     narrowband = st.sidebar.slider("Narrowband", 0.0, 1.0, 0.5)
     narrowbanddrd = st.sidebar.slider("Narrowband DRD", 0.0, 1.0, 0.5)
@@ -39,13 +84,13 @@ def app():
         'Stars Type': stars_type,
         'Signal Frequency(MHz)': signal_frequency,
         'Signal Duration(seconds)': signal_duration,
-        'Signal Origin ': signal_origin
+        'Signal Origin': signal_origin
     }
 
     features = pd.DataFrame(data, index=[0])
 
     # Display user input
-    st.subheader('User Input Features')
+    st.markdown("<div class='input-section'><h2>User Input Features</h2></div>", unsafe_allow_html=True)
     st.write(features)
 
     if model is not None:
@@ -53,9 +98,13 @@ def app():
         prediction = model.predict(features)
 
         # Display the prediction result
-        st.subheader('Prediction Result')
-        prediction_message = "📡 It's a safe signal from natural sources." if prediction[0] == 'Safe : signal from natural sources' else "🛸 Warning: potential alien signal detected!"
-        st.markdown(f"<div class='prediction-box'>{prediction_message}</div>", unsafe_allow_html=True)
+        st.markdown("<div class='prediction-box'><h2>Prediction Result</h2></div>", unsafe_allow_html=True)
+        prediction_message = (
+            "📡 It's a safe signal from natural sources." 
+            if prediction[0] == 'Safe : signal from natural sources' 
+            else "🛸 Warning: potential alien signal detected!"
+        )
+        st.markdown(f"<p>{prediction_message}</p>", unsafe_allow_html=True)
 
 # Ensure the function `app()` is called when this file is executed
 if __name__ == "__main__":
