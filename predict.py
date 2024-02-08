@@ -1,71 +1,22 @@
 import streamlit as st
-import pandas as pd
+import os
 import joblib
 
-# Custom CSS for a colorful and professional look
-st.markdown("""
-    <style>
-    .main-title {
-        text-align: center;
-        font-size: 36px;
-        color: #FF6347;
-        font-weight: bold;
-        margin-bottom: 20px;
-    }
-    .sidebar-header {
-        font-size: 20px;
-        color: #4682B4;
-        font-weight: bold;
-        margin-bottom: 10px;
-    }
-    .input-section {
-        background-color: #f0f8ff;
-        padding: 20px;
-        border-radius: 10px;
-        margin-bottom: 20px;
-    }
-    .prediction-box {
-        background-color: #00fa9a;
-        padding: 20px;
-        border-radius: 10px;
-        color: white;
-        font-size: 18px;
-        font-weight: bold;
-        text-align: center;
-        margin-bottom: 20px;
-    }
-    .error-box {
-        background-color: #ffcccb;
-        padding: 20px;
-        border-radius: 10px;
-        color: #d8000c;
-        font-size: 18px;
-        font-weight: bold;
-        text-align: center;
-        margin-bottom: 20px;
-    }
-    .warning-box {
-        background-color: #ffffe0;
-        padding: 20px;
-        border-radius: 10px;
-        color: #ff4500;
-        font-size: 18px;
-        font-weight: bold;
-        text-align: center;
-        margin-bottom: 20px;
-    }
-    </style>
-""", unsafe_allow_html=True)
+# Path to the model file
+model_path = "RF_alien_signal.pkl"
 
-# Attempt to load the trained model
-try:
-    model = joblib.load("RF_alien_signal.pkl")
-except FileNotFoundError:
-    st.markdown("<div class='error-box'>Model file 'RF_alien_signal.pkl' not found. Please check the file path.</div>", unsafe_allow_html=True)
+# Check if the model file exists
+if not os.path.isfile(model_path):
+    st.markdown(f"<div class='error-box'>Model file '{model_path}' not found. Please check the file path.</div>", unsafe_allow_html=True)
+    st.write("Current directory contents:")
+    st.write(os.listdir('.'))
     model = None
-except Exception as e:
-    st.markdown(f"<div class='error-box'>An error occurred while loading the model: {e}</div>", unsafe_allow_html=True)
-    model = None
+else:
+    try:
+        model = joblib.load(model_path)
+    except Exception as e:
+        st.markdown(f"<div class='error-box'>An error occurred while loading the model: {e}</div>", unsafe_allow_html=True)
+        model = None
 
 def app():
     if model is None:
@@ -74,9 +25,9 @@ def app():
 
     st.markdown("<h1 class='main-title'>🚀 Signal Classification Prediction</h1>", unsafe_allow_html=True)
 
+    # Sidebar for user input
     st.sidebar.header('🔧 User Input Parameters')
 
-    # Sidebar for user input
     brightpixel = st.sidebar.slider("Bright Pixel", 0.0, 1.0, 0.5)
     narrowband = st.sidebar.slider("Narrowband", 0.0, 1.0, 0.5)
     narrowbanddrd = st.sidebar.slider("Narrowband DRD", 0.0, 1.0, 0.5)
