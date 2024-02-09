@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 import joblib
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Add custom CSS for styling
 st.markdown("""
@@ -82,15 +84,27 @@ def app():
     st.subheader('📝 User Input Features')
     st.write(features, key="write", unsafe_allow_html=True)
 
-    if model is not None:
-        # Make prediction
-        prediction = model.predict(features)
+    # Plot input values
+    st.subheader('📊 Input Value Visualization')
+    fig, ax = plt.subplots()
+    sns.barplot(x=list(data.keys()), y=list(data.values()), ax=ax, palette="viridis")
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
+    st.pyplot(fig)
 
-        # Display the prediction result
-        st.subheader('🔮 Prediction Result')
-        prediction_message = "📡 It's a safe signal from natural sources." if prediction[0] == 'Safe : signal from natural sources' else "🛸 Warning: potential alien signal detected!"
-        prediction_class = 'safe' if prediction[0] == 'Safe : signal from natural sources' else 'alert'
-        st.markdown(f"<div class='prediction-box {prediction_class}'>{prediction_message}</div>", unsafe_allow_html=True)
+    # Add button to make prediction
+    if st.button('🔍 Make Prediction'):
+        if model is not None:
+            # Make prediction
+            prediction = model.predict(features)
+
+            # Display the prediction result
+            st.subheader('🔮 Prediction Result')
+            prediction_message = "📡 It's a safe signal from natural sources." if prediction[0] == 'Safe : signal from natural sources' else "🛸 Warning: potential alien signal detected!"
+            prediction_class = 'safe' if prediction[0] == 'Safe : signal from natural sources' else 'alert'
+            st.markdown(f"<div class='prediction-box {prediction_class}'>{prediction_message}</div>", unsafe_allow_html=True)
+            
+            # Add feedback section
+
 
 # Ensure the function `app()` is called when this file is executed
 if __name__ == "__main__":
