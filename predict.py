@@ -2,6 +2,29 @@ import streamlit as st
 import pandas as pd
 import joblib
 
+# Add custom CSS for styling
+st.markdown("""
+    <style>
+    .prediction-box {
+        background-color: #f2f2f2;
+        border-radius: 10px;
+        padding: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .sidebar .sidebar-content {
+        background-color: #f5f5f5;
+        border-radius: 10px;
+        padding: 20px;
+    }
+    .stTitle {
+        color: #007bff;
+    }
+    .stSubheader {
+        color: #333;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 # Attempt to load the trained model
 try:
     model = joblib.load("RF alien signal.pkl")
@@ -19,7 +42,7 @@ def app():
 
     st.title("🚀 Predict")
 
-    # Sidebar for user input
+    # Sidebar for user input with a background color
     st.sidebar.header('User Input Parameters')
     
     brightpixel = st.sidebar.slider("Bright Pixel", 0.0, 1.0, 0.5)
@@ -39,12 +62,12 @@ def app():
         'Stars Type': stars_type,
         'Signal Frequency(MHz)': signal_frequency,
         'Signal Duration(seconds)': signal_duration,
-        'Signal Origin ': signal_origin
+        'Signal Origin': signal_origin
     }
 
     features = pd.DataFrame(data, index=[0])
 
-    # Display user input
+    # Display user input with a stylish box
     st.subheader('User Input Features')
     st.write(features)
 
@@ -52,10 +75,15 @@ def app():
         # Make prediction
         prediction = model.predict(features)
 
-        # Display the prediction result
+        # Display the prediction result with different colors
         st.subheader('Prediction Result')
         prediction_message = "📡 It's a safe signal from natural sources." if prediction[0] == 'Safe : signal from natural sources' else "🛸 Warning: potential alien signal detected!"
-        st.markdown(f"<div class='prediction-box'>{prediction_message}</div>", unsafe_allow_html=True)
+        prediction_color = "#d4edda" if prediction[0] == 'Safe : signal from natural sources' else "#f8d7da"
+        st.markdown(f"""
+            <div class='prediction-box' style='background-color: {prediction_color};'>
+                {prediction_message}
+            </div>
+        """, unsafe_allow_html=True)
 
 # Ensure the function `app()` is called when this file is executed
 if __name__ == "__main__":
