@@ -2,6 +2,40 @@ import streamlit as st
 import pandas as pd
 import joblib
 
+# Add custom CSS for styling
+st.markdown("""
+    <style>
+    .title {
+        color: #1f77b4; /* Blue */
+    }
+    .sidebar .sidebar-content {
+        background-color: #f0f8ff; /* Light blue */
+        border-radius: 10px;
+        padding: 20px;
+    }
+    .stSubheader {
+        color: #ff7f0e; /* Orange */
+    }
+    .stWrite {
+        background-color: #e6f9ff; /* Light cyan */
+        padding: 10px;
+        border-radius: 5px;
+    }
+    .prediction-box {
+        border-radius: 10px;
+        padding: 15px;
+        color: #333;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .safe {
+        background-color: #d4edda; /* Light green */
+    }
+    .alert {
+        background-color: #f8d7da; /* Light red */
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 # Attempt to load the trained model
 try:
     model = joblib.load("RF alien signal.pkl")
@@ -17,7 +51,7 @@ def app():
         st.warning("⚠️ Model is not loaded. Please check the error messages above.")
         return
 
-    st.title("🚀 Predict")
+    st.title("🚀 Predict", anchor="title")
 
     # Sidebar for user input
     st.sidebar.header('🛠️ User Input Parameters')
@@ -46,7 +80,7 @@ def app():
 
     # Display user input
     st.subheader('📝 User Input Features')
-    st.write(features)
+    st.write(features, key="write", unsafe_allow_html=True)
 
     if model is not None:
         # Make prediction
@@ -55,7 +89,8 @@ def app():
         # Display the prediction result
         st.subheader('🔮 Prediction Result')
         prediction_message = "📡 It's a safe signal from natural sources." if prediction[0] == 'Safe : signal from natural sources' else "🛸 Warning: potential alien signal detected!"
-        st.markdown(f"<div class='prediction-box'>{prediction_message}</div>", unsafe_allow_html=True)
+        prediction_class = 'safe' if prediction[0] == 'Safe : signal from natural sources' else 'alert'
+        st.markdown(f"<div class='prediction-box {prediction_class}'>{prediction_message}</div>", unsafe_allow_html=True)
 
 # Ensure the function `app()` is called when this file is executed
 if __name__ == "__main__":
