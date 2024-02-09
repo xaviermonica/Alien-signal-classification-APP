@@ -52,7 +52,7 @@ def app():
     stars_type = st.sidebar.slider("Stars Type", 0, 20, 10)
     signal_frequency = st.sidebar.slider("Signal Frequency (MHz)", 1000, 2000, 1400)
     signal_duration = st.sidebar.slider("Signal Duration (seconds)", 1, 20, 10)
-    signal_origin = st.sidebar.slider("Signal Origin", 0, 5, 0)
+    
 
     # Update the feature names to match those used during model training
     data = {
@@ -63,7 +63,7 @@ def app():
         'Stars Type': stars_type,
         'Signal Frequency(MHz)': signal_frequency,
         'Signal Duration(seconds)': signal_duration,
-        'Signal Origin': signal_origin  # Ensure this matches the trained model's feature names
+        
     }
 
     features = pd.DataFrame(data, index=[0])
