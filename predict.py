@@ -54,6 +54,7 @@ def app():
     signal_duration = st.sidebar.slider("Signal Duration (seconds)", 1, 20, 10)
     signal_origin = st.sidebar.slider("Signal Origin", 0, 5, 0)
 
+    # Update the feature names to match those used during model training
     data = {
         'brightpixel': brightpixel,
         'narrowband': narrowband,
@@ -62,7 +63,7 @@ def app():
         'Stars Type': stars_type,
         'Signal Frequency(MHz)': signal_frequency,
         'Signal Duration(seconds)': signal_duration,
-        'Signal Origin': signal_origin
+        'Signal Origin': signal_origin  # Ensure this matches the trained model's feature names
     }
 
     features = pd.DataFrame(data, index=[0])
@@ -72,18 +73,21 @@ def app():
     st.write(features)
 
     if model is not None:
-        # Make prediction
-        prediction = model.predict(features)
+        try:
+            # Make prediction
+            prediction = model.predict(features)
 
-        # Display the prediction result with different colors
-        st.subheader('Prediction Result')
-        prediction_message = "📡 It's a safe signal from natural sources." if prediction[0] == 'Safe : signal from natural sources' else "🛸 Warning: potential alien signal detected!"
-        prediction_color = "#d4edda" if prediction[0] == 'Safe : signal from natural sources' else "#f8d7da"
-        st.markdown(f"""
-            <div class='prediction-box' style='background-color: {prediction_color};'>
-                {prediction_message}
-            </div>
-        """, unsafe_allow_html=True)
+            # Display the prediction result with different colors
+            st.subheader('Prediction Result')
+            prediction_message = "📡 It's a safe signal from natural sources." if prediction[0] == 'Safe : signal from natural sources' else "🛸 Warning: potential alien signal detected!"
+            prediction_color = "#d4edda" if prediction[0] == 'Safe : signal from natural sources' else "#f8d7da"
+            st.markdown(f"""
+                <div class='prediction-box' style='background-color: {prediction_color};'>
+                    {prediction_message}
+                </div>
+            """, unsafe_allow_html=True)
+        except Exception as e:
+            st.error(f"An error occurred during prediction: {e}")
 
 # Ensure the function `app()` is called when this file is executed
 if __name__ == "__main__":
