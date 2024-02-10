@@ -36,7 +36,7 @@ def main():
             <p>Your gateway to analyzing and predicting signals 🚀</p>
         </div>
     """, unsafe_allow_html=True)
-    st.image('bermuda-triangle-mystery-event.jpg', width=None, use_column_width=None, channels="RGB")
+    
 
     # Sidebar for navigation with a dropdown menu
     st.sidebar.title("Navigation")
@@ -46,7 +46,7 @@ def main():
     with st.spinner(f"Loading {selection}..."):
         page_file = PAGES[selection]
         load_page(page_file)
-    
+    st.image('bermuda-triangle-mystery-event.jpg')
     # Footer
     st.markdown("""
         <style>
