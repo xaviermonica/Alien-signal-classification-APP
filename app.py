@@ -1,5 +1,5 @@
 import streamlit as st
-
+st.sidebar.image("bermuda-triangle-mystery-event .jpg", use_column_width=True)
 # Define pages and their corresponding script filenames
 PAGES = {
     "🚀 Predict": "predict.py",
@@ -46,7 +46,7 @@ def main():
     with st.spinner(f"Loading {selection}..."):
         page_file = PAGES[selection]
         load_page(page_file)
-    st.image('bermuda-triangle-mystery-event.jpg')
+    
     # Footer
     st.markdown("""
         <style>
