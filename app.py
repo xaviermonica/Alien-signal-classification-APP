@@ -59,7 +59,7 @@ def main():
         </style>
         <div class="footer">
             <p>&copy; 2024 Signal Classification App</p>
-            <p>Follow us on <a href="https://twitter.com/yourprofile" target="_blank">Twitter</a> | <a href="https://github.com/yourprofile" target="_blank">GitHub</a></p>
+            <p>Follow me on <a href="https://www.linkedin.com/in/devanik/" target="_blank">Linkedin</a> | <a href="https://github.com/Devanik21" target="_blank">GitHub</a></p>
         </div>
     """, unsafe_allow_html=True)
 
