@@ -36,6 +36,7 @@ def main():
             <p>Your gateway to analyzing and predicting signals 🚀</p>
         </div>
     """, unsafe_allow_html=True)
+    st.image('bermuda-triangle-mystery-event.jpg', caption=None, width=None, use_column_width=None, channels="RGB", format=None)
 
     # Sidebar for navigation with a dropdown menu
     st.sidebar.title("Navigation")
