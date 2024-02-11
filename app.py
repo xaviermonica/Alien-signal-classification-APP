@@ -1,5 +1,5 @@
 import streamlit as st
-st.sidebar.image("bermuda_triangle_mystery_event.jpg", use_column_width=True)
+
 # Define pages and their corresponding script filenames
 PAGES = {
     "🚀 Predict": "predict.py",
@@ -18,7 +18,7 @@ def load_page(page_file):
 def main():
     # Set the page configuration
     st.set_page_config(page_title="Signal Classification App", page_icon="📡🛸", layout="wide")
-    
+    st.sidebar.image("bermuda_triangle_mystery_event.jpg", use_column_width=True)
     # Custom header
     st.markdown("""
         <style>
