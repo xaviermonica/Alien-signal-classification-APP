@@ -1,5 +1,5 @@
 import streamlit as st
-st.sidebar.image("bermuda-triangle-mystery-event.jpg", use_column_width=True)
+st.sidebar.image("bermuda_triangle_mystery_event.jpg", use_column_width=True)
 # Define pages and their corresponding script filenames
 PAGES = {
     "🚀 Predict": "predict.py",
