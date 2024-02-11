@@ -18,7 +18,7 @@ def load_page(page_file):
 def main():
     # Set the page configuration
     st.set_page_config(page_title="Signal Classification App", page_icon="📡🛸", layout="wide")
-    st.sidebar.image("Designer (6).ppg", use_column_width=True)
+    
     # Custom header
     st.markdown("""
         <style>
@@ -36,7 +36,6 @@ def main():
             <p>Your gateway to analyzing and predicting signals 🚀</p>
         </div>
     """, unsafe_allow_html=True)
-    
 
     # Sidebar for navigation with a dropdown menu
     st.sidebar.title("Navigation")
@@ -47,7 +46,7 @@ def main():
         page_file = PAGES[selection]
         load_page(page_file)
     
-    # Footer
+    # Footer with image
     st.markdown("""
         <style>
         .footer {
@@ -57,8 +56,14 @@ def main():
             border-top: 1px solid #ddd;
             color: #333;
         }
+        .footer img {
+            width: 100px;
+            height: auto;
+            border-radius: 50%;
+        }
         </style>
         <div class="footer">
+            <img src="Designer (6).png" alt="Designer Image">
             <p>&copy; 2024 Signal Classification App</p>
             <p>Follow me on <a href="https://www.linkedin.com/in/devanik/" target="_blank">Linkedin</a> | <a href="https://github.com/Devanik21" target="_blank">GitHub</a></p>
         </div>
