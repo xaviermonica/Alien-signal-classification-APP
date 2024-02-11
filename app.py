@@ -63,7 +63,6 @@ def main():
         }
         </style>
         <div class="footer">
-            <img src="Designer (6).png" alt="Designer Image">
             <p>&copy; 2024 Signal Classification App</p>
             <p>Follow me on <a href="https://www.linkedin.com/in/devanik/" target="_blank">Linkedin</a> | <a href="https://github.com/Devanik21" target="_blank">GitHub</a></p>
         </div>
