@@ -38,7 +38,7 @@ def main():
     """, unsafe_allow_html=True)
 
     # Sidebar with image and navigation
-    st.sidebar.image("Designer (6).jpg", use_column_width=True)
+    st.sidebar.image("Designer.png", use_column_width=True)
     st.sidebar.title("Navigation")
     selection = st.sidebar.selectbox("Select a page", list(PAGES.keys()), key="sidebar")
     
