@@ -37,7 +37,8 @@ def main():
         </div>
     """, unsafe_allow_html=True)
 
-    # Sidebar for navigation with a dropdown menu
+    # Sidebar with image and navigation
+    st.sidebar.image("Designer (6).jpg", use_column_width=True)
     st.sidebar.title("Navigation")
     selection = st.sidebar.selectbox("Select a page", list(PAGES.keys()), key="sidebar")
     
@@ -46,7 +47,7 @@ def main():
         page_file = PAGES[selection]
         load_page(page_file)
     
-    # Footer with image
+    # Footer
     st.markdown("""
         <style>
         .footer {
@@ -55,11 +56,6 @@ def main():
             background-color: #f0f0f0;
             border-top: 1px solid #ddd;
             color: #333;
-        }
-        .footer img {
-            width: 100px;
-            height: auto;
-            border-radius: 50%;
         }
         </style>
         <div class="footer">
