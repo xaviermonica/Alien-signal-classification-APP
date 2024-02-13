@@ -46,6 +46,8 @@ def main():
     with st.spinner(f"Loading {selection}..."):
         page_file = PAGES[selection]
         load_page(page_file)
+        
+    st.image("Designer2.png", use_column_width=True)
     
     # Footer
     st.markdown("""
@@ -63,6 +65,6 @@ def main():
             <p>Follow me on <a href="https://www.linkedin.com/in/devanik/" target="_blank">Linkedin</a> | <a href="https://github.com/Devanik21" target="_blank">GitHub</a></p>
         </div>
     """, unsafe_allow_html=True)
-    st.image("Designer2.png", use_column_width=True)
+    
 if __name__ == "__main__":
     main()
