@@ -97,14 +97,6 @@ def app():
             
             # Add feedback section
 
-import matplotlib.pyplot as plt
-import seaborn as sns
-import numpy as np
-
-# Normalize the 'Signal Frequency (MHz)' for visualization
-scaled_data = data.copy()
-scaled_data['Signal Frequency(MHz)'] = np.log10(scaled_data['Signal Frequency(MHz)'])  # Log scaling
-
 # Plot input values
  # Plot input values
 st.subheader('📊 Input Value Visualization')
