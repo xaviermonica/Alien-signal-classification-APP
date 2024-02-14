@@ -107,11 +107,11 @@ scaled_data['Signal Frequency(MHz)'] = np.log10(scaled_data['Signal Frequency(MH
 
 # Plot input values
  # Plot input values
-    st.subheader('📊 Input Value Visualization')
-    fig, ax = plt.subplots()
-    sns.barplot(x=list(data.keys()), y=list(data.values()), ax=ax, palette="viridis")
-    ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
-    st.pyplot(fig)
+st.subheader('📊 Input Value Visualization')
+fig, ax = plt.subplots()
+sns.barplot(x=list(data.keys()), y=list(data.values()), ax=ax, palette="viridis")
+ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
+st.pyplot(fig)
 
 # Ensure the function `app()` is called when this file is executed
 if __name__ == "__main__":
