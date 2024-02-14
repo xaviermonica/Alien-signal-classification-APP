@@ -97,12 +97,23 @@ def app():
             
             # Add feedback section
 
-    # Plot input values
-    st.subheader('📊 Input Value Visualization')
-    fig, ax = plt.subplots()
-    sns.barplot(x=list(data.keys()), y=list(data.values()), ax=ax, palette="viridis")
-    ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
-    st.pyplot(fig)
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
+
+# Normalize the 'Signal Frequency (MHz)' for visualization
+scaled_data = data.copy()
+scaled_data['Signal Frequency(MHz)'] = np.log10(scaled_data['Signal Frequency(MHz)'])  # Log scaling
+
+# Plot input values
+st.subheader('📊 Input Value Visualization')
+
+fig, ax = plt.subplots()
+sns.barplot(x=list(scaled_data.keys()), y=list(scaled_data.values()), ax=ax, palette="viridis")
+ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
+ax.set_ylabel("Feature Value (Log for Frequency)")
+
+st.pyplot(fig)
 
 
 
