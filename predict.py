@@ -3,6 +3,7 @@ import pandas as pd
 import joblib
 import matplotlib.pyplot as plt
 import seaborn as sns
+import numpy as np
 
 # Add custom CSS for styling
 st.markdown("""
@@ -75,7 +76,7 @@ def app():
         'Stars Type': stars_type,
         'Signal Frequency(MHz)': signal_frequency,
         'Signal Duration(seconds)': signal_duration,
-        'Signal Origin ': signal_origin
+        'Signal Origin': signal_origin
     }
 
     features = pd.DataFrame(data, index=[0])
@@ -83,6 +84,7 @@ def app():
     # Display user input
     st.subheader('📝 User Input Features')
     st.write(features, key="write", unsafe_allow_html=True)
+
     # Add button to make prediction
     if st.button('🔍 Make Prediction'):
         if model is not None:
@@ -95,14 +97,14 @@ def app():
             prediction_class = 'safe' if prediction[0] == 'Safe : signal from natural sources' else 'alert'
             st.markdown(f"<div class='prediction-box {prediction_class}'>{prediction_message}</div>", unsafe_allow_html=True)
             
-            # Add feedback section
-
-# Plot input values
- # Plot input values
+            # Plot input values
             st.subheader('📊 Input Value Visualization')
+            scaled_data = data.copy()
+            scaled_data['Signal Frequency(MHz)'] = np.log10(scaled_data['Signal Frequency(MHz)'])  # Log scaling for frequency
             fig, ax = plt.subplots()
-            sns.barplot(x=list(data.keys()), y=list(data.values()), ax=ax, palette="viridis")
+            sns.barplot(x=list(scaled_data.keys()), y=list(scaled_data.values()), ax=ax, palette="viridis")
             ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
+            ax.set_ylabel("Feature Value (Log for Frequency)")
             st.pyplot(fig)
 
 # Ensure the function `app()` is called when this file is executed
