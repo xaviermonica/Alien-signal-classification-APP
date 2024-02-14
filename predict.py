@@ -83,14 +83,6 @@ def app():
     # Display user input
     st.subheader('📝 User Input Features')
     st.write(features, key="write", unsafe_allow_html=True)
-
-    # Plot input values
-    st.subheader('📊 Input Value Visualization')
-    fig, ax = plt.subplots()
-    sns.barplot(x=list(data.keys()), y=list(data.values()), ax=ax, palette="viridis")
-    ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
-    st.pyplot(fig)
-
     # Add button to make prediction
     if st.button('🔍 Make Prediction'):
         if model is not None:
@@ -104,6 +96,14 @@ def app():
             st.markdown(f"<div class='prediction-box {prediction_class}'>{prediction_message}</div>", unsafe_allow_html=True)
             
             # Add feedback section
+
+    # Plot input values
+    st.subheader('📊 Input Value Visualization')
+    fig, ax = plt.subplots()
+    sns.barplot(x=list(data.keys()), y=list(data.values()), ax=ax, palette="viridis")
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right')
+    st.pyplot(fig)
+
 
 
 # Ensure the function `app()` is called when this file is executed
