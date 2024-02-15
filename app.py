@@ -17,7 +17,7 @@ def load_page(page_file):
 
 def main():
     # Set the page configuration
-    st.set_page_config(page_title="Signal Classification App", page_icon="📡🛸", layout="wide")
+    st.set_page_config(page_title="Signal Classification App", page_icon="🛸", layout="wide")
     
     # Custom header
     st.markdown("""
