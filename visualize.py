@@ -7,77 +7,98 @@ import plotly.express as px
 st.title("📊 Narrowband Signal Visualizations")
 
 # Load the narrowband signals data
-data = pd.read_csv("narrowband signals.csv")
+data = pd.read_csv("narrowband_signals.csv")
 
 # Display the dataset
 st.write("### Dataset Overview")
 st.dataframe(data.head())
 
-# Dropdown for selecting feature to visualize
-feature = st.selectbox(
-    "Select a feature to visualize",
-    ['brightpixel', 'narrowband', 'narrowbanddrd', 'noise', 'Signal Frequency(MHz)', 'Signal Duration(seconds)']
+# ---- Bar Plot ----
+st.write("### Bar Plot")
+barplot_columns = st.multiselect(
+    "Choose one feature to visualize on Y-axis for the Bar Plot and 'Stars Type' will be on X-axis:",
+    ['brightpixel', 'narrowband', 'narrowbanddrd', 'noise', 'Signal Frequency(MHz)', 'Signal Duration(seconds)'],
+    default=['brightpixel']
 )
 
-# Bar plot for selected feature
-st.write(f"### Bar Plot of {feature}")
-fig, ax = plt.subplots()
-sns.barplot(x='Stars Type', y=feature, data=data, ax=ax)
-st.pyplot(fig)
+if len(barplot_columns) == 1:
+    st.write(f"### Bar Plot of {barplot_columns[0]}")
+    fig, ax = plt.subplots()
+    sns.barplot(x='Stars Type', y=barplot_columns[0], data=data, ax=ax)
+    st.pyplot(fig)
+else:
+    st.error("Please select exactly 1 feature for the Bar Plot.")
 
-# Correlation heatmap
+# ---- Correlation Heatmap ----
 st.write("### Correlation Heatmap")
-fig, ax = plt.subplots(figsize=(10, 6))
-sns.heatmap(data[['brightpixel', 'narrowband', 'narrowbanddrd', 'noise']].corr(), annot=True, cmap='coolwarm', ax=ax)
-st.pyplot(fig)
+heatmap_columns = st.multiselect(
+    "Choose at least 2 features for the Correlation Heatmap:",
+    ['brightpixel', 'narrowband', 'narrowbanddrd', 'noise', 'Signal Frequency(MHz)', 'Signal Duration(seconds)'],
+    default=['brightpixel', 'narrowband']
+)
 
-# Scatter plot for signal frequency vs signal duration
-st.write("### Signal Frequency vs Signal Duration")
-fig, ax = plt.subplots()
-sns.scatterplot(x='Signal Frequency(MHz)', y='Signal Duration(seconds)', hue='Stars Type', data=data, ax=ax)
-st.pyplot(fig)
+if len(heatmap_columns) >= 2:
+    st.write(f"### Correlation Heatmap for {', '.join(heatmap_columns)}")
+    fig, ax = plt.subplots(figsize=(10, 6))
+    sns.heatmap(data[heatmap_columns].corr(), annot=True, cmap='coolwarm', ax=ax)
+    st.pyplot(fig)
+else:
+    st.error("Please select at least 2 features for the Correlation Heatmap.")
 
-# ---- 10 Other Visualizations ----
-# (Refer to the previous code for additional visualizations)
+# ---- Scatter Plot: Signal Frequency vs Signal Duration ----
+st.write("### Scatter Plot: Signal Frequency vs Signal Duration")
+scatter_columns = st.multiselect(
+    "Choose 2 columns for X and Y axes:",
+    ['Signal Frequency(MHz)', 'Signal Duration(seconds)'],
+    default=['Signal Frequency(MHz)', 'Signal Duration(seconds)']
+)
 
-# Sunburst Plot 1: User input columns
+if len(scatter_columns) == 2:
+    st.write(f"### Scatter Plot: {scatter_columns[0]} vs {scatter_columns[1]}")
+    fig, ax = plt.subplots()
+    sns.scatterplot(x=scatter_columns[0], y=scatter_columns[1], hue='Stars Type', data=data, ax=ax)
+    st.pyplot(fig)
+else:
+    st.error("Please select exactly 2 columns for the Scatter Plot.")
+
+# ---- Sunburst Plot 1 ----
 st.write("### Sunburst Plot 1")
-columns_1 = st.multiselect(
-    "Choose columns for Sunburst Plot 1 (choose 2 or more):",
+sunburst_columns_1 = st.multiselect(
+    "Choose at least 2 columns for Sunburst Plot 1:",
     ['Stars Type', 'brightpixel', 'narrowband', 'narrowbanddrd', 'noise', 'Signal Frequency(MHz)', 'Signal Duration(seconds)', 'Remarks'],
     default=['Stars Type', 'Remarks']
 )
 
-if len(columns_1) >= 2:
-    fig_sunburst_1 = px.sunburst(data, path=columns_1)
+if len(sunburst_columns_1) >= 2:
+    fig_sunburst_1 = px.sunburst(data, path=sunburst_columns_1)
     st.plotly_chart(fig_sunburst_1)
 else:
-    st.write("Please select at least 2 columns for the Sunburst plot.")
+    st.error("Please select at least 2 columns for Sunburst Plot 1.")
 
-# Sunburst Plot 2: User input columns
+# ---- Sunburst Plot 2 ----
 st.write("### Sunburst Plot 2")
-columns_2 = st.multiselect(
-    "Choose columns for Sunburst Plot 2 (choose 2 or more):",
+sunburst_columns_2 = st.multiselect(
+    "Choose at least 2 columns for Sunburst Plot 2:",
     ['Stars Type', 'brightpixel', 'narrowband', 'narrowbanddrd', 'noise', 'Signal Frequency(MHz)', 'Signal Duration(seconds)', 'Remarks'],
     default=['Stars Type', 'Signal Frequency(MHz)']
 )
 
-if len(columns_2) >= 2:
-    fig_sunburst_2 = px.sunburst(data, path=columns_2)
+if len(sunburst_columns_2) >= 2:
+    fig_sunburst_2 = px.sunburst(data, path=sunburst_columns_2)
     st.plotly_chart(fig_sunburst_2)
 else:
-    st.write("Please select at least 2 columns for the Sunburst plot.")
+    st.error("Please select at least 2 columns for Sunburst Plot 2.")
 
-# Sunburst Plot 3: User input columns
+# ---- Sunburst Plot 3 ----
 st.write("### Sunburst Plot 3")
-columns_3 = st.multiselect(
-    "Choose columns for Sunburst Plot 3 (choose 2 or more):",
+sunburst_columns_3 = st.multiselect(
+    "Choose at least 2 columns for Sunburst Plot 3:",
     ['Stars Type', 'brightpixel', 'narrowband', 'narrowbanddrd', 'noise', 'Signal Frequency(MHz)', 'Signal Duration(seconds)', 'Remarks'],
     default=['Stars Type', 'narrowband']
 )
 
-if len(columns_3) >= 2:
-    fig_sunburst_3 = px.sunburst(data, path=columns_3)
+if len(sunburst_columns_3) >= 2:
+    fig_sunburst_3 = px.sunburst(data, path=sunburst_columns_3)
     st.plotly_chart(fig_sunburst_3)
 else:
-    st.write("Please select at least 2 columns for the Sunburst plot.")
+    st.error("Please select at least 2 columns for Sunburst Plot 3.")
