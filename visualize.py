@@ -119,7 +119,7 @@ st.pyplot(fig)
 st.write("### Pairplot of Selected Features")
 pairplot_columns = st.multiselect(
     "Choose features for Pairplot (at least 2):",
-    ['brightpixel', 'narrowband', 'narrowbanddrd', 'noise', 'Signal Frequency(MHz)', 'Signal Duration(seconds)', 'Stars Type'],
+    ['brightpixel', 'narrowband', 'narrowbanddrd', 'noise', 'Signal Frequency(MHz)', 'Signal Duration(seconds)'],
     default=['brightpixel', 'narrowband', 'narrowbanddrd', 'noise']
 )
 
