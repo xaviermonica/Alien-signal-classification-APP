@@ -7,7 +7,7 @@ import plotly.express as px
 st.title("📊 Narrowband Signal Visualizations")
 
 # Load the narrowband signals data
-data = pd.read_csv("narrowband_signals.csv")
+data = pd.read_csv("narrowband signals.csv")
 
 # Display the dataset
 st.write("### Dataset Overview")
