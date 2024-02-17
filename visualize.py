@@ -119,12 +119,16 @@ st.pyplot(fig)
 st.write("### Pairplot of Selected Features")
 pairplot_columns = st.multiselect(
     "Choose features for Pairplot (at least 2):",
-    ['brightpixel', 'narrowband', 'narrowbanddrd', 'noise', 'Signal Frequency(MHz)', 'Signal Duration(seconds)'],
+    ['brightpixel', 'narrowband', 'narrowbanddrd', 'noise', 'Signal Frequency(MHz)', 'Signal Duration(seconds)', 'Stars Type'],
     default=['brightpixel', 'narrowband', 'narrowbanddrd', 'noise']
 )
 
+# Ensure 'Stars Type' is included for hue if it is selected
+hue = 'Stars Type' if 'Stars Type' in pairplot_columns else None
+
 if len(pairplot_columns) >= 2:
-    fig = sns.pairplot(data[pairplot_columns], hue='Stars Type')
+    st.write(f"### Pairplot of {', '.join(pairplot_columns)}")
+    fig = sns.pairplot(data[pairplot_columns], hue=hue)
     st.pyplot(fig)
 else:
     st.error("Please select at least 2 features for the Pairplot.")
