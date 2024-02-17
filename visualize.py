@@ -24,7 +24,10 @@ barplot_columns = st.multiselect(
 if len(barplot_columns) == 1:
     st.write(f"### Bar Plot of {barplot_columns[0]}")
     fig, ax = plt.subplots()
-    sns.barplot(x='Stars Type', y=barplot_columns[0], data=data, ax=ax, palette='viridis')
+    sns.barplot(x='Stars Type', y=barplot_columns[0], data=data, ax=ax, palette='plasma')
+    ax.set_title(f'Bar Plot of {barplot_columns[0]} by Stars Type', fontsize=16)
+    ax.set_xlabel('Stars Type', fontsize=14)
+    ax.set_ylabel(barplot_columns[0], fontsize=14)
     st.pyplot(fig)
 else:
     st.error("Please select exactly 1 feature for the Bar Plot.")
@@ -39,8 +42,9 @@ heatmap_columns = st.multiselect(
 
 if len(heatmap_columns) >= 2:
     st.write(f"### Correlation Heatmap for {', '.join(heatmap_columns)}")
-    fig, ax = plt.subplots(figsize=(10, 6))
-    sns.heatmap(data[heatmap_columns].corr(), annot=True, cmap='coolwarm', ax=ax)
+    fig, ax = plt.subplots(figsize=(12, 8))
+    sns.heatmap(data[heatmap_columns].corr(), annot=True, cmap='viridis', ax=ax, linewidths=.5)
+    ax.set_title('Correlation Heatmap', fontsize=16)
     st.pyplot(fig)
 else:
     st.error("Please select at least 2 features for the Correlation Heatmap.")
@@ -56,7 +60,10 @@ scatter_columns = st.multiselect(
 if len(scatter_columns) == 2:
     st.write(f"### Scatter Plot: {scatter_columns[0]} vs {scatter_columns[1]}")
     fig, ax = plt.subplots()
-    sns.scatterplot(x=scatter_columns[0], y=scatter_columns[1], hue='Stars Type', data=data, ax=ax, palette='deep')
+    sns.scatterplot(x=scatter_columns[0], y=scatter_columns[1], hue='Stars Type', data=data, ax=ax, palette='Set1')
+    ax.set_title(f'Scatter Plot: {scatter_columns[0]} vs {scatter_columns[1]}', fontsize=16)
+    ax.set_xlabel(scatter_columns[0], fontsize=14)
+    ax.set_ylabel(scatter_columns[1], fontsize=14)
     st.pyplot(fig)
 else:
     st.error("Please select exactly 2 columns for the Scatter Plot.")
@@ -70,7 +77,7 @@ sunburst_columns_1 = st.multiselect(
 )
 
 if len(sunburst_columns_1) >= 2:
-    fig_sunburst_1 = px.sunburst(data, path=sunburst_columns_1)
+    fig_sunburst_1 = px.sunburst(data, path=sunburst_columns_1, color='Signal Frequency(MHz)')
     st.plotly_chart(fig_sunburst_1)
 else:
     st.error("Please select at least 2 columns for Sunburst Plot 1.")
@@ -84,7 +91,7 @@ sunburst_columns_2 = st.multiselect(
 )
 
 if len(sunburst_columns_2) >= 2:
-    fig_sunburst_2 = px.sunburst(data, path=sunburst_columns_2)
+    fig_sunburst_2 = px.sunburst(data, path=sunburst_columns_2, color='Signal Duration(seconds)')
     st.plotly_chart(fig_sunburst_2)
 else:
     st.error("Please select at least 2 columns for Sunburst Plot 2.")
@@ -98,7 +105,7 @@ sunburst_columns_3 = st.multiselect(
 )
 
 if len(sunburst_columns_3) >= 2:
-    fig_sunburst_3 = px.sunburst(data, path=sunburst_columns_3)
+    fig_sunburst_3 = px.sunburst(data, path=sunburst_columns_3, color='brightpixel')
     st.plotly_chart(fig_sunburst_3)
 else:
     st.error("Please select at least 2 columns for Sunburst Plot 3.")
@@ -107,12 +114,18 @@ else:
 st.write("### Boxplot of Brightpixel vs. Stars Type")
 fig, ax = plt.subplots()
 sns.boxplot(x='Stars Type', y='brightpixel', data=data, ax=ax, palette='pastel')
+ax.set_title('Boxplot of Brightpixel by Stars Type', fontsize=16)
+ax.set_xlabel('Stars Type', fontsize=14)
+ax.set_ylabel('Brightpixel', fontsize=14)
 st.pyplot(fig)
 
 # ---- Violin Plot ----
 st.write("### Violin Plot of Narrowband vs. Stars Type")
 fig, ax = plt.subplots()
 sns.violinplot(x='Stars Type', y='narrowband', data=data, ax=ax, palette='muted')
+ax.set_title('Violin Plot of Narrowband by Stars Type', fontsize=16)
+ax.set_xlabel('Stars Type', fontsize=14)
+ax.set_ylabel('Narrowband', fontsize=14)
 st.pyplot(fig)
 
 # ---- Pairplot ----
@@ -137,39 +150,56 @@ else:
 st.write("### Histogram of Signal Frequency (MHz)")
 fig, ax = plt.subplots()
 sns.histplot(data['Signal Frequency(MHz)'], bins=20, kde=True, ax=ax, color='skyblue')
+ax.set_title('Histogram of Signal Frequency (MHz)', fontsize=16)
+ax.set_xlabel('Signal Frequency (MHz)', fontsize=14)
+ax.set_ylabel('Frequency', fontsize=14)
 st.pyplot(fig)
 
 # ---- Line Plot ----
 st.write("### Line Plot: Signal Frequency vs. Signal Duration")
 fig, ax = plt.subplots()
 sns.lineplot(x='Signal Duration(seconds)', y='Signal Frequency(MHz)', data=data, ax=ax, color='orange')
+ax.set_title('Line Plot: Signal Frequency vs. Signal Duration', fontsize=16)
+ax.set_xlabel('Signal Duration (seconds)', fontsize=14)
+ax.set_ylabel('Signal Frequency (MHz)', fontsize=14)
 st.pyplot(fig)
 
 # ---- Heatmap ----
 st.write("### Heatmap of Signal Frequency and Signal Duration (Brightness Intensity)")
 fig, ax = plt.subplots()
-sns.heatmap(data.pivot_table(values='brightpixel', index='Signal Frequency(MHz)', columns='Signal Duration(seconds)'), cmap="Blues", ax=ax)
+sns.heatmap(data.pivot_table(values='brightpixel', index='Signal Frequency(MHz)', columns='Signal Duration(seconds)'), cmap="Blues", ax=ax, linewidths=.5)
+ax.set_title('Heatmap of Brightness Intensity by Signal Frequency and Duration', fontsize=16)
 st.pyplot(fig)
 
 # ---- KDE Plot ----
 st.write("### KDE Plot of Narrowband vs Narrowbanddrd")
 fig, ax = plt.subplots()
 sns.kdeplot(x='narrowband', y='narrowbanddrd', data=data, ax=ax, cmap="Reds", shade=True)
+ax.set_title('KDE Plot of Narrowband vs Narrowbanddrd', fontsize=16)
+ax.set_xlabel('Narrowband', fontsize=14)
+ax.set_ylabel('Narrowbanddrd', fontsize=14)
 st.pyplot(fig)
 
 # ---- Swarm Plot ----
 st.write("### Swarm Plot of Noise vs. Stars Type")
 fig, ax = plt.subplots()
 sns.swarmplot(x='Stars Type', y='noise', data=data, ax=ax, palette='Set2')
+ax.set_title('Swarm Plot of Noise by Stars Type', fontsize=16)
+ax.set_xlabel('Stars Type', fontsize=14)
+ax.set_ylabel('Noise', fontsize=14)
 st.pyplot(fig)
 
 # ---- Strip Plot ----
 st.write("### Strip Plot of Signal Frequency(MHz) vs. Stars Type")
 fig, ax = plt.subplots()
 sns.stripplot(x='Stars Type', y='Signal Frequency(MHz)', data=data, ax=ax, palette='Set1')
+ax.set_title('Strip Plot of Signal Frequency by Stars Type', fontsize=16)
+ax.set_xlabel('Stars Type', fontsize=14)
+ax.set_ylabel('Signal Frequency (MHz)', fontsize=14)
 st.pyplot(fig)
 
 # ---- Joint Plot ----
 st.write("### Joint Plot of Brightpixel vs. Noise")
 fig = sns.jointplot(x='brightpixel', y='noise', data=data, kind="hex", color="green", cmap='Greens')
+fig.fig.suptitle('Joint Plot of Brightpixel vs Noise', fontsize=16)
 st.pyplot(fig)
