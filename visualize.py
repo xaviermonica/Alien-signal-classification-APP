@@ -203,3 +203,21 @@ st.write("### Joint Plot of Brightpixel vs. Noise")
 fig = sns.jointplot(x='brightpixel', y='noise', data=data, kind="hex", color="green", cmap='Greens')
 fig.fig.suptitle('Joint Plot of Brightpixel vs Noise', fontsize=8)
 st.pyplot(fig)
+
+st.write("### Radar Chart of Features by Stars Type")
+
+# Prepare the data
+data_radar = data[['Stars Type', 'brightpixel', 'narrowband', 'narrowbanddrd', 'noise', 'Signal Frequency(MHz)', 'Signal Duration(seconds)']].copy()
+data_radar = data_radar.groupby('Stars Type').mean().reset_index()
+
+# Create radar chart
+fig_radar = px.line_polar(data_radar, r=data_radar.columns[1:], theta=data_radar.columns[1:], color='Stars Type', line_close=True)
+fig_radar.update_layout(title='Radar Chart of Features by Stars Type')
+st.plotly_chart(fig_radar)
+
+
+st.write("### Treemap of Stars Type and Noise")
+
+fig_treemap = px.treemap(data, path=['Stars Type', 'Remarks'], values='noise', color='noise', color_continuous_scale='RdBu')
+fig_treemap.update_layout(title='Treemap of Stars Type and Noise')
+st.plotly_chart(fig_treemap)
