@@ -24,7 +24,7 @@ barplot_columns = st.multiselect(
 if len(barplot_columns) == 1:
     st.write(f"### Bar Plot of {barplot_columns[0]}")
     fig, ax = plt.subplots()
-    sns.barplot(x='Stars Type', y=barplot_columns[0], data=data, ax=ax)
+    sns.barplot(x='Stars Type', y=barplot_columns[0], data=data, ax=ax, palette='viridis')
     st.pyplot(fig)
 else:
     st.error("Please select exactly 1 feature for the Bar Plot.")
@@ -56,7 +56,7 @@ scatter_columns = st.multiselect(
 if len(scatter_columns) == 2:
     st.write(f"### Scatter Plot: {scatter_columns[0]} vs {scatter_columns[1]}")
     fig, ax = plt.subplots()
-    sns.scatterplot(x=scatter_columns[0], y=scatter_columns[1], hue='Stars Type', data=data, ax=ax)
+    sns.scatterplot(x=scatter_columns[0], y=scatter_columns[1], hue='Stars Type', data=data, ax=ax, palette='deep')
     st.pyplot(fig)
 else:
     st.error("Please select exactly 2 columns for the Scatter Plot.")
@@ -106,13 +106,13 @@ else:
 # ---- Boxplot ----
 st.write("### Boxplot of Brightpixel vs. Stars Type")
 fig, ax = plt.subplots()
-sns.boxplot(x='Stars Type', y='brightpixel', data=data, ax=ax)
+sns.boxplot(x='Stars Type', y='brightpixel', data=data, ax=ax, palette='pastel')
 st.pyplot(fig)
 
 # ---- Violin Plot ----
 st.write("### Violin Plot of Narrowband vs. Stars Type")
 fig, ax = plt.subplots()
-sns.violinplot(x='Stars Type', y='narrowband', data=data, ax=ax)
+sns.violinplot(x='Stars Type', y='narrowband', data=data, ax=ax, palette='muted')
 st.pyplot(fig)
 
 # ---- Pairplot ----
@@ -128,7 +128,7 @@ hue = 'Stars Type' if 'Stars Type' in pairplot_columns else None
 
 if len(pairplot_columns) >= 2:
     st.write(f"### Pairplot of {', '.join(pairplot_columns)}")
-    fig = sns.pairplot(data[pairplot_columns], hue=hue)
+    fig = sns.pairplot(data[pairplot_columns], hue=hue, palette='husl')
     st.pyplot(fig)
 else:
     st.error("Please select at least 2 features for the Pairplot.")
@@ -136,13 +136,13 @@ else:
 # ---- Histogram ----
 st.write("### Histogram of Signal Frequency (MHz)")
 fig, ax = plt.subplots()
-sns.histplot(data['Signal Frequency(MHz)'], bins=20, kde=True, ax=ax)
+sns.histplot(data['Signal Frequency(MHz)'], bins=20, kde=True, ax=ax, color='skyblue')
 st.pyplot(fig)
 
 # ---- Line Plot ----
 st.write("### Line Plot: Signal Frequency vs. Signal Duration")
 fig, ax = plt.subplots()
-sns.lineplot(x='Signal Duration(seconds)', y='Signal Frequency(MHz)', data=data, ax=ax)
+sns.lineplot(x='Signal Duration(seconds)', y='Signal Frequency(MHz)', data=data, ax=ax, color='orange')
 st.pyplot(fig)
 
 # ---- Heatmap ----
@@ -160,16 +160,16 @@ st.pyplot(fig)
 # ---- Swarm Plot ----
 st.write("### Swarm Plot of Noise vs. Stars Type")
 fig, ax = plt.subplots()
-sns.swarmplot(x='Stars Type', y='noise', data=data, ax=ax)
+sns.swarmplot(x='Stars Type', y='noise', data=data, ax=ax, palette='Set2')
 st.pyplot(fig)
 
 # ---- Strip Plot ----
 st.write("### Strip Plot of Signal Frequency(MHz) vs. Stars Type")
 fig, ax = plt.subplots()
-sns.stripplot(x='Stars Type', y='Signal Frequency(MHz)', data=data, ax=ax)
+sns.stripplot(x='Stars Type', y='Signal Frequency(MHz)', data=data, ax=ax, palette='Set1')
 st.pyplot(fig)
 
 # ---- Joint Plot ----
 st.write("### Joint Plot of Brightpixel vs. Noise")
-fig = sns.jointplot(x='brightpixel', y='noise', data=data, kind="hex", color="g")
+fig = sns.jointplot(x='brightpixel', y='noise', data=data, kind="hex", color="green", cmap='Greens')
 st.pyplot(fig)
