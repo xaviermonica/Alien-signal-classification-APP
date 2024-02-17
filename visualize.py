@@ -201,5 +201,5 @@ st.pyplot(fig)
 # ---- Joint Plot ----
 st.write("### Joint Plot of Brightpixel vs. Noise")
 fig = sns.jointplot(x='brightpixel', y='noise', data=data, kind="hex", color="green", cmap='Greens')
-fig.fig.suptitle('Joint Plot of Brightpixel vs Noise', fontsize=16)
+fig.fig.suptitle('Joint Plot of Brightpixel vs Noise', fontsize=12)
 st.pyplot(fig)
