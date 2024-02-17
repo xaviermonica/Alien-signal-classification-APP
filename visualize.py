@@ -69,7 +69,7 @@ else:
     st.error("Please select exactly 2 columns for the Scatter Plot.")
 
 # ---- Sunburst Plot 1 ----
-st.write("### Sunburst Plot 1")
+st.write("### Sunburst Plot: Stars Type and Remarks")
 sunburst_columns_1 = st.multiselect(
     "Choose at least 2 columns for Sunburst Plot 1:",
     ['Stars Type', 'brightpixel', 'narrowband', 'narrowbanddrd', 'noise', 'Signal Frequency(MHz)', 'Signal Duration(seconds)', 'Remarks'],
@@ -83,7 +83,7 @@ else:
     st.error("Please select at least 2 columns for Sunburst Plot 1.")
 
 # ---- Sunburst Plot 2 ----
-st.write("### Sunburst Plot 2")
+st.write("### Sunburst Plot: Stars Type and Signal Frequency")
 sunburst_columns_2 = st.multiselect(
     "Choose at least 2 columns for Sunburst Plot 2:",
     ['Stars Type', 'brightpixel', 'narrowband', 'narrowbanddrd', 'noise', 'Signal Frequency(MHz)', 'Signal Duration(seconds)', 'Remarks'],
@@ -97,7 +97,7 @@ else:
     st.error("Please select at least 2 columns for Sunburst Plot 2.")
 
 # ---- Sunburst Plot 3 ----
-st.write("### Sunburst Plot 3")
+st.write("### Sunburst Plot: Stars Type and Brightpixel")
 sunburst_columns_3 = st.multiselect(
     "Choose at least 2 columns for Sunburst Plot 3:",
     ['Stars Type', 'brightpixel', 'narrowband', 'narrowbanddrd', 'noise', 'Signal Frequency(MHz)', 'Signal Duration(seconds)', 'Remarks'],
