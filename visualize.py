@@ -204,14 +204,21 @@ fig = sns.jointplot(x='brightpixel', y='noise', data=data, kind="hex", color="gr
 fig.fig.suptitle('Joint Plot of Brightpixel vs Noise', fontsize=8)
 st.pyplot(fig)
 
+import plotly.express as px
+
 st.write("### Radar Chart of Features by Stars Type")
 
 # Prepare the data
 data_radar = data[['Stars Type', 'brightpixel', 'narrowband', 'narrowbanddrd', 'noise', 'Signal Frequency(MHz)', 'Signal Duration(seconds)']].copy()
+
+# Group by 'Stars Type' and calculate mean values
 data_radar = data_radar.groupby('Stars Type').mean().reset_index()
 
+# Convert to long format for radar chart
+data_radar_long = data_radar.melt(id_vars='Stars Type', var_name='Feature', value_name='Value')
+
 # Create radar chart
-fig_radar = px.line_polar(data_radar, r=data_radar.columns[1:], theta=data_radar.columns[1:], color='Stars Type', line_close=True)
+fig_radar = px.line_polar(data_radar_long, r='Value', theta='Feature', color='Stars Type', line_close=True)
 fig_radar.update_layout(title='Radar Chart of Features by Stars Type')
 st.plotly_chart(fig_radar)
 
