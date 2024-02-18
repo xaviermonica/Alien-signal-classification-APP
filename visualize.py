@@ -228,3 +228,44 @@ st.write("### Treemap of Stars Type and Noise")
 fig_treemap = px.treemap(data, path=['Stars Type', 'Remarks'], values='noise', color='noise', color_continuous_scale='RdBu')
 fig_treemap.update_layout(title='Treemap of Stars Type and Noise')
 st.plotly_chart(fig_treemap)
+
+
+st.write("### Bubble Chart of Signal Frequency vs. Signal Duration")
+
+fig_bubble = px.scatter(data, x='Signal Frequency(MHz)', y='Signal Duration(seconds)', size='brightpixel', color='Stars Type', hover_name='Remarks', size_max=60)
+fig_bubble.update_layout(title='Bubble Chart of Signal Frequency vs. Signal Duration')
+st.plotly_chart(fig_bubble)
+
+
+st.write("### Facet Grid of Noise by Stars Type")
+
+g = sns.FacetGrid(data, col="Stars Type", col_wrap=4, height=4, aspect=1.2)
+g.map_dataframe(sns.histplot, x='noise', bins=20, kde=True)
+g.set_titles(col_template="{col_name}")
+g.set_axis_labels("Noise", "Frequency")
+g.fig.suptitle('Noise Distribution by Stars Type', fontsize=16)
+g.fig.tight_layout()
+g.fig.subplots_adjust(top=0.9)
+st.pyplot(g.fig)
+
+
+st.write("### Hexbin Plot of Signal Frequency vs. Signal Duration")
+
+fig, ax = plt.subplots()
+hb = ax.hexbin(data['Signal Frequency(MHz)'], data['Signal Duration(seconds)'], gridsize=30, cmap='Blues')
+cb = fig.colorbar(hb, ax=ax)
+ax.set_xlabel('Signal Frequency (MHz)')
+ax.set_ylabel('Signal Duration (seconds)')
+ax.set_title('Hexbin Plot of Signal Frequency vs. Signal Duration')
+st.pyplot(fig)
+
+import plotly.express as px
+
+st.write("### Stacked Area Chart of Signal Frequency and Duration")
+
+# Create a new dataframe for stacked area chart
+data_stacked = data.groupby(['Signal Duration(seconds)', 'Stars Type']).mean().reset_index()
+fig_stacked = px.area(data_stacked, x='Signal Duration(seconds)', y='Signal Frequency(MHz)', color='Stars Type', line_group='Stars Type')
+fig_stacked.update_layout(title='Stacked Area Chart of Signal Frequency and Duration')
+st.plotly_chart(fig_stacked)
+
