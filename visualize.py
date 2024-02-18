@@ -259,13 +259,27 @@ ax.set_ylabel('Signal Duration (seconds)')
 ax.set_title('Hexbin Plot of Signal Frequency vs. Signal Duration')
 st.pyplot(fig)
 
-import plotly.express as px
 
-st.write("### Stacked Area Chart of Signal Frequency and Duration")
+# Convert relevant columns to numeric, forcing errors to NaN
+columns_to_convert = ['brightpixel', 'narrowband', 'narrowbanddrd', 'noise', 'Signal Frequency(MHz)', 'Signal Duration(seconds)']
+for column in columns_to_convert:
+    data[column] = pd.to_numeric(data[column], errors='coerce')
 
-# Create a new dataframe for stacked area chart
-data_stacked = data.groupby(['Signal Duration(seconds)', 'Stars Type']).mean().reset_index()
-fig_stacked = px.area(data_stacked, x='Signal Duration(seconds)', y='Signal Frequency(MHz)', color='Stars Type', line_group='Stars Type')
-fig_stacked.update_layout(title='Stacked Area Chart of Signal Frequency and Duration')
-st.plotly_chart(fig_stacked)
 
+st.write("### Stacked Area Chart of Features by Stars Type")
+
+# Ensure numeric data
+data = data.copy()
+for column in columns_to_convert:
+    data[column] = pd.to_numeric(data[column], errors='coerce')
+
+# Group by 'Stars Type' and calculate mean values
+data_grouped = data.groupby('Stars Type').mean().reset_index()
+
+# Convert to long format for stacked area chart
+data_long = data_grouped.melt(id_vars='Stars Type', var_name='Feature', value_name='Value')
+
+# Create stacked area chart
+fig_area = px.area(data_long, x='Feature', y='Value', color='Stars Type', line_group='Stars Type', 
+                   title='Stacked Area Chart of Features by Stars Type')
+st.plotly_chart(fig_area)
