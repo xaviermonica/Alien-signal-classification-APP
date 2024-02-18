@@ -260,12 +260,11 @@ ax.set_title('Hexbin Plot of Signal Frequency vs. Signal Duration')
 st.pyplot(fig)
 
 
-# Convert relevant columns to numeric, forcing errors to NaN
 import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-st.title("📊 Simple Stacked Area Chart")
+st.title("📊 Stacked Area Chart of Features")
 
 # Load the dataset
 data = pd.read_csv("narrowband signals.csv")
@@ -276,7 +275,8 @@ for column in columns_to_convert:
     data[column] = pd.to_numeric(data[column], errors='coerce')
 
 # Aggregate data by 'Stars Type'
-data_grouped = data.groupby('Stars Type').mean().reset_index()
+# Use sum or median as an alternative to mean
+data_grouped = data.groupby('Stars Type').sum().reset_index()
 
 # Convert to long format for stacked area chart
 data_long = data_grouped.melt(id_vars='Stars Type', var_name='Feature', value_name='Value')
@@ -284,7 +284,16 @@ data_long = data_grouped.melt(id_vars='Stars Type', var_name='Feature', value_na
 # Create stacked area chart
 fig_area = px.area(data_long, x='Feature', y='Value', color='Stars Type', 
                    title='Stacked Area Chart of Features by Stars Type',
-                   labels={'Value': 'Mean Value', 'Feature': 'Feature'})
+                   labels={'Value': 'Total Value', 'Feature': 'Features'},
+                   template='plotly_dark')  # Dark theme for better visibility
+
+# Update layout for better aesthetics
+fig_area.update_layout(
+    xaxis_title='Features',
+    yaxis_title='Total Value',
+    legend_title='Stars Type',
+    xaxis_tickangle=-45  # Rotate x-axis labels for better readability
+)
 
 # Display the chart
 st.plotly_chart(fig_area)
