@@ -29,19 +29,24 @@ if uploaded_file is not None:
     st.write("**Statistical Summary**:")
     st.write(data.describe())
 
-    # Allow user to select features for correlation heatmap
-    st.subheader("📈 Correlation Heatmap")
-    features = st.multiselect("Select features for correlation", options=data.columns.tolist(), default=data.columns.tolist())
+    # Automatically select only numeric columns for correlation heatmap
+    numeric_columns = data.select_dtypes(include=['float64', 'int64']).columns.tolist()
     
-    if len(features) > 1:
-        # Compute and plot heatmap
-        corr = data[features].corr()
-        fig, ax = plt.subplots()
-        sns.heatmap(corr, annot=True, cmap='coolwarm', ax=ax)
-        st.pyplot(fig)
+    if len(numeric_columns) > 1:
+        st.subheader("📈 Correlation Heatmap")
+        selected_columns = st.multiselect("Select numeric features for correlation", numeric_columns, default=numeric_columns)
+        
+        # Compute and plot heatmap if multiple columns are selected
+        if len(selected_columns) > 1:
+            corr = data[selected_columns].corr()
+            fig, ax = plt.subplots()
+            sns.heatmap(corr, annot=True, cmap='coolwarm', ax=ax)
+            st.pyplot(fig)
+        else:
+            st.warning("Please select at least two features for the correlation heatmap.")
     else:
-        st.warning("Please select at least two features for the correlation heatmap.")
-    
+        st.warning("No numeric columns available for correlation analysis.")
+
     # Show interactive analysis options
     st.subheader("🔬 Interactive Analysis")
     
