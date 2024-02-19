@@ -17,7 +17,7 @@ st.markdown("""
         background-color: #d6e4f0;
     }
     h1, h2, h3, h4, h5, h6 {
-        color: #003d66;
+        color: #79c2f2;
         font-family: 'Arial';
     }
     .stButton>button {
