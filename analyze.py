@@ -50,7 +50,7 @@ if uploaded_file is not None:
                 
                 # Plot correlation heatmap
                 fig, ax = plt.subplots(figsize=(10, 6))
-                sns.heatmap(corr, annot=True, cmap='coolwarm', mask=mask, ax=ax, linewidths=.5, cbar_kws={"shrink": .75})
+                sns.heatmap(corr, annot=True, cmap='coolwarm',  ax=ax, linewidths=.5, cbar_kws={"shrink": .75})
                 ax.set_title("Correlation Heatmap", fontsize=15)
                 st.pyplot(fig)
             else:
