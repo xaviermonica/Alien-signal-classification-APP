@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Set page configuration
-st.set_page_config(page_title="Advanced Data Analysis", page_icon="🔍", layout="wide")
 
 # Custom CSS for professional look
 st.markdown("""
