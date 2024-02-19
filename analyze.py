@@ -2,71 +2,87 @@ import streamlit as st
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+import numpy as np
 
-# Page title with icon
+# Page title with a stylish header
 st.title("🔍 Advanced Data Analysis")
 
-# Description with improved formatting
+# Introductory text with better Markdown formatting
 st.markdown("""
-    This section allows you to conduct **detailed data analysis** on your dataset. You can explore statistical summaries, 
-    visualize distributions, and perform interactive analysis.
+    Welcome to the **Advanced Data Analysis** section. Upload your dataset to:
+    - Perform **statistical analysis**.
+    - Visualize **correlations** and **distributions**.
+    - Explore data interactively and run **custom analysis**.
+    ---
 """)
 
-# Upload dataset option
+# Sidebar file upload section
 st.sidebar.header("Upload Your Dataset 📂")
 uploaded_file = st.sidebar.file_uploader("Choose a CSV file", type=["csv"])
 
-# Check if a file is uploaded
+# If a file is uploaded
 if uploaded_file is not None:
-    data = pd.read_csv(uploaded_file)
-    st.subheader("📊 Data Overview")
-    
-    # Show first few rows of the dataset
-    st.write("**Data Preview**:")
-    st.dataframe(data.head())
-    
-    # Show summary statistics
-    st.write("**Statistical Summary**:")
-    st.write(data.describe())
-
-    # Automatically select only numeric columns for correlation heatmap
-    numeric_columns = data.select_dtypes(include=['float64', 'int64']).columns.tolist()
-    
-    if len(numeric_columns) > 1:
-        st.subheader("📈 Correlation Heatmap")
-        selected_columns = st.multiselect("Select numeric features for correlation", numeric_columns, default=numeric_columns)
+    # Load the data
+    try:
+        data = pd.read_csv(uploaded_file)
+        st.subheader("📊 Data Overview")
+        st.write(f"**Dataset Dimensions**: {data.shape[0]} rows, {data.shape[1]} columns")
         
-        # Compute and plot heatmap if multiple columns are selected
-        if len(selected_columns) > 1:
-            corr = data[selected_columns].corr()
+        # Display a preview of the dataset
+        st.write("**Data Preview**:")
+        st.dataframe(data.head())
+        
+        # Show summary statistics with expanded options
+        if st.checkbox("Show Statistical Summary 📊", value=True):
+            st.write(data.describe().T.style.format("{:.2f}").background_gradient(cmap="coolwarm"))
+
+        # Filter numeric columns for correlation analysis
+        numeric_columns = data.select_dtypes(include=['float64', 'int64']).columns.tolist()
+        
+        if numeric_columns:
+            st.subheader("📈 Correlation Heatmap")
+            selected_columns = st.multiselect("Select numeric features for correlation", numeric_columns, default=numeric_columns)
+            
+            # Show correlation heatmap only if two or more columns are selected
+            if len(selected_columns) > 1:
+                corr = data[selected_columns].corr()
+                mask = np.triu(np.ones_like(corr, dtype=bool))  # Mask to show only one triangle of the heatmap
+                
+                # Plot correlation heatmap
+                fig, ax = plt.subplots(figsize=(10, 6))
+                sns.heatmap(corr, annot=True, cmap='coolwarm', mask=mask, ax=ax, linewidths=.5, cbar_kws={"shrink": .75})
+                ax.set_title("Correlation Heatmap", fontsize=15)
+                st.pyplot(fig)
+            else:
+                st.warning("Please select at least two numeric features for correlation analysis.")
+        else:
+            st.warning("No numeric columns available for correlation analysis.")
+        
+        # Add interactive analysis section
+        st.subheader("🔬 Interactive Feature Distribution")
+        selected_feature = st.selectbox("Select a feature for distribution analysis", data.columns)
+        
+        if pd.api.types.is_numeric_dtype(data[selected_feature]):
+            # Plot distribution for numeric features
             fig, ax = plt.subplots()
-            sns.heatmap(corr, annot=True, cmap='coolwarm', ax=ax)
+            sns.histplot(data[selected_feature], kde=True, ax=ax, color="blue")
+            ax.set_title(f"Distribution of {selected_feature}", fontsize=15)
             st.pyplot(fig)
         else:
-            st.warning("Please select at least two features for the correlation heatmap.")
-    else:
-        st.warning("No numeric columns available for correlation analysis.")
+            st.warning(f"The feature '{selected_feature}' is non-numeric and cannot be visualized with a distribution plot.")
 
-    # Show interactive analysis options
-    st.subheader("🔬 Interactive Analysis")
-    
-    # Select columns for comparison
-    selected_feature = st.selectbox("Select a feature for distribution analysis:", data.columns)
-    
-    # Plot selected feature distribution
-    fig, ax = plt.subplots()
-    sns.histplot(data[selected_feature], kde=True, ax=ax)
-    ax.set_title(f"Distribution of {selected_feature}")
-    st.pyplot(fig)
-    
-    # Allow user to input custom analysis
-    st.sidebar.subheader("Customize Analysis ✍️")
-    custom_code = st.sidebar.text_area("Enter your custom Pandas code:", "data.head()")
-    
-    try:
+        # Allow user to enter custom Pandas code for more advanced analysis
+        st.sidebar.subheader("Run Custom Analysis ✍️")
+        custom_code = st.sidebar.text_area("Enter your custom Pandas code here:", "data.head()")
+        
         st.subheader("🔧 Custom Analysis Output")
-        st.write(eval(custom_code))
+        try:
+            result = eval(custom_code)
+            st.write(result)
+        except Exception as e:
+            st.error(f"Error in custom code: {e}")
+
     except Exception as e:
-        st.error(f"Error: {e}")
+        st.error(f"Failed to load the dataset. Error: {e}")
 else:
-    st.write("📂 Please upload a dataset to begin.")
+    st.info("Please upload a dataset to begin.")
