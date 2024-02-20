@@ -25,7 +25,7 @@ st.markdown("""
 
     /* Style headings with bold and color */
     h1, h2, h3, h4, h5, h6 {
-        color: #42a8db;
+        color: #9cd4f0;
         font-weight: 700;
         font-family: 'Arial', sans-serif;
     }
