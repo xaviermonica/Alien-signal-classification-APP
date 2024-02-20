@@ -4,127 +4,157 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Set page configuration with vibrant emojis
+# Set page configuration with attractive layout
 
-# Custom CSS for a modern and colorful look
+# Custom CSS for a modern, attractive design with animations
 st.markdown("""
     <style>
+    /* Set background for app */
     .reportview-container {
-        background-color: #f4f7fa;
+        background: linear-gradient(135deg, #c9eaff, #ffffff);
+        color: black;
+        font-family: 'Helvetica', sans-serif;
+    }
+
+    /* Style sidebar background */
+    .sidebar .sidebar-content {
+        background-color: #dde9f0;
+        border-right: 2px solid #a7c6db;
         color: black;
     }
-    .sidebar .sidebar-content {
-        background-color: #d6e4f0;
-    }
+
+    /* Style headings with bold and color */
     h1, h2, h3, h4, h5, h6 {
-        color: #79c2f2;
-        font-family: 'Arial';
+        color: #004466;
+        font-weight: 700;
+        font-family: 'Arial', sans-serif;
     }
+
+    /* Style buttons with smooth hover animations */
     .stButton>button {
-        background-color: #FF4B4B;
+        background-color: #005f73;
         color: white;
         border-radius: 10px;
-        border: 2px solid white;
+        font-size: 18px;
+        padding: 10px;
+        transition: background-color 0.3s ease;
     }
-    .stTextInput>div>input {
-        background-color: #e1e1e1;
-        border-radius: 10px;
+    .stButton>button:hover {
+        background-color: #0a9396;
+        transform: scale(1.05);
     }
+
+    /* Add box shadow to DataFrame */
     .stDataFrame {
         border-radius: 10px;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Style text input and multiselect for better user experience */
+    .stTextInput>div>input, .stMultiSelect>div {
+        background-color: #f0f4f8;
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    /* Highlight table cells */
+    .highlight-cell {
+        animation: highlight 1s ease;
+    }
+
+    @keyframes highlight {
+        0% { background-color: #dff9fb; }
+        100% { background-color: transparent; }
     }
     </style>
     """, unsafe_allow_html=True)
 
-# Title with emojis for added appeal
-st.title("🔍✨ Advanced Data Analysis Dashboard")
+# Title with a modern look and emoji
+st.title("📊🌟 Advanced Data Analysis Dashboard")
 
-# Introductory text with enhanced Markdown formatting and emoji
+# Introductory text with cleaner Markdown formatting
 st.markdown("""
-    Welcome to the **🌟 Advanced Data Analysis** section! Here's what you can do:
+    ### Welcome to the **Advanced Data Analysis** section! 🎉
+    Here's what you can explore:
     - 📊 Perform detailed **statistical analysis**.
-    - 🔗 Visualize **correlations** and **distributions** dynamically.
-    - 🧠 Run custom **Pandas code** for further exploration.
+    - 🔗 Visualize **correlations** and **distributions**.
+    - 🧠 Run custom **Pandas code** to gain more insights.
     ---
 """)
 
-# Sidebar section for file upload with emoji
+# Sidebar section for file upload with emoji and smooth interaction
 st.sidebar.header("📂 Upload Your Dataset")
-uploaded_file = st.sidebar.file_uploader("🔍 Choose a CSV file", type=["csv"])
+uploaded_file = st.sidebar.file_uploader("Choose a CSV file to begin your analysis", type=["csv"])
 
 # If a file is uploaded
 if uploaded_file is not None:
-    # Load the data
     try:
+        # Load data and display it with animations
         data = pd.read_csv(uploaded_file)
-        st.subheader("📊 Dataset Overview")
-        st.write(f"**Rows and Columns**: {data.shape[0]} rows, {data.shape[1]} columns")
+        st.subheader("🔍 Dataset Overview")
+        st.write(f"📏 **Rows and Columns**: {data.shape[0]} rows, {data.shape[1]} columns")
         
-        # Display a preview of the dataset
         st.write("🔎 **Data Preview:**")
-        st.dataframe(data.head(10))  # Show the first 10 rows with a scrollable table
+        st.dataframe(data.head(10))  # Show the first 10 rows
 
-        # Show summary statistics with enhanced formatting and cool emoji
+        # Add cool summary statistics with better styling and emojis
         if st.checkbox("📊 Show Statistical Summary", value=True):
-            st.write(data.describe().T.style.format("{:.2f}").background_gradient(cmap="coolwarm"))
+            styled_df = data.describe().T.style.format("{:.2f}").background_gradient(cmap="coolwarm")
+            st.write(styled_df)
         
-        # Filter numeric columns for correlation analysis
+        # Filter numeric columns for correlation heatmap
         numeric_columns = data.select_dtypes(include=['float64', 'int64']).columns.tolist()
 
         if numeric_columns:
             st.subheader("📈 Correlation Heatmap 🔗")
-            selected_columns = st.multiselect("🎯 Select numeric features for correlation", numeric_columns, default=numeric_columns)
+            selected_columns = st.multiselect("🎯 Select numeric features for correlation analysis", numeric_columns, default=numeric_columns)
 
-            # Show correlation heatmap only if two or more columns are selected
             if len(selected_columns) > 1:
                 corr = data[selected_columns].corr()
                 mask = np.triu(np.ones_like(corr, dtype=bool))  # Mask to show only one triangle of the heatmap
                 
                 # Plot correlation heatmap
-                fig, ax = plt.subplots(figsize=(10, 6))
-                sns.heatmap(corr, annot=True, cmap='coolwarm', mask=mask, ax=ax, linewidths=.5, cbar_kws={"shrink": .75})
-                ax.set_title("💡 Correlation Heatmap", fontsize=15)
+                fig, ax = plt.subplots(figsize=(12, 8))
+                sns.heatmap(corr, annot=True, cmap='coolwarm', mask=mask, ax=ax, linewidths=0.5, cbar_kws={"shrink": 0.75})
+                ax.set_title("💡 Correlation Heatmap", fontsize=18)
                 st.pyplot(fig)
             else:
-                st.warning("⚠️ Please select at least two numeric features for correlation analysis.")
+                st.warning("⚠️ Please select at least two numeric features for correlation.")
         else:
             st.warning("⚠️ No numeric columns available for correlation analysis.")
         
-        # Interactive analysis section with emoji
-        st.subheader("🔬 Interactive Feature Distribution")
-        selected_feature = st.selectbox("🔎 Select a feature for distribution analysis", data.columns)
+        # Add interactive distribution analysis with smooth visuals
+        st.subheader("🔬 Explore Feature Distribution")
+        selected_feature = st.selectbox("📊 Select a feature for analysis", data.columns)
 
-        # Plot based on the selected feature type
+        # Numeric and categorical feature-based plots
         if pd.api.types.is_numeric_dtype(data[selected_feature]):
-            # Plot distribution for numeric features
             fig, ax = plt.subplots()
-            sns.histplot(data[selected_feature], kde=True, ax=ax, color="purple")
+            sns.histplot(data[selected_feature], kde=True, ax=ax, color="#0077b6")
             ax.set_title(f"📊 Distribution of {selected_feature}", fontsize=15)
             st.pyplot(fig)
         else:
-            # Plot countplot for categorical features
             fig, ax = plt.subplots()
             sns.countplot(x=data[selected_feature], ax=ax, palette="Set2")
-            ax.set_title(f"🔢 Count Plot of {selected_feature}", fontsize=15)
+            ax.set_title(f"📊 Count Plot of {selected_feature}", fontsize=15)
             plt.xticks(rotation=45)
             st.pyplot(fig)
 
-        # Allow user to enter custom Pandas code for advanced analysis
-        st.sidebar.subheader("📝 Run Custom Analysis")
-        custom_code = st.sidebar.text_area("✍️ Enter your custom Pandas code here:", "data.head()")
-        
-        st.subheader("🛠️ Custom Analysis Output")
-        # Display results of custom code
+        # Allow custom Pandas code execution with enhanced styling
+        st.sidebar.subheader("📝 Custom Analysis Tool")
+        custom_code = st.sidebar.text_area("✍️ Write your custom Pandas code:", "data.head()")
+
+        st.subheader("🛠️ Custom Code Output")
         try:
             result = eval(custom_code)
             if isinstance(result, pd.DataFrame):
-                st.dataframe(result)  # Show DataFrame output in a scrollable table
+                st.dataframe(result)  # Display DataFrame with better UI
             else:
                 st.write(result)
         except Exception as e:
             st.error(f"❌ Error in custom code: {e}")
 
     except Exception as e:
-        st.error(f"❌ Failed to load the dataset. Error: {e}")
+        st.error(f"❌ Error loading the dataset: {e}")
 else:
-    st.info("📂 Please upload a dataset to begin.")
+    st.info("📂 Please upload a CSV dataset to get started.")
