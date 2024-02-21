@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Set page configuration with attractive layout
-st.set_page_config(page_title="🌟 Advanced Data Analysis", page_icon="📊", layout="wide")
 
 # Custom CSS for a modern, attractive design with animations
 st.markdown("""
@@ -26,7 +25,7 @@ st.markdown("""
 
     /* Style headings with bold and color */
     h1, h2, h3, h4, h5, h6 {
-        color: #004466;
+        color: #9cd4f0;
         font-weight: 700;
         font-family: 'Arial', sans-serif;
     }
