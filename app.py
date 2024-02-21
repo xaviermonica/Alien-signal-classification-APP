@@ -154,7 +154,9 @@ if anova_columns:
     import statsmodels.api as sm
 
     for col in anova_columns:
-        model = ols(f'{col} ~ C(Stars Type)', data=data).fit()
+        # Make sure the column names are properly quoted
+        formula = f'{col} ~ C(`Stars Type`)'
+        model = ols(formula, data=data).fit()
         anova_table = sm.stats.anova_lm(model, typ=2)
         st.write(f"#### ANOVA Results for {col}")
         st.write(anova_table)
