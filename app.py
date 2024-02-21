@@ -9,7 +9,7 @@ PAGES = {
     "🔭 Insights": "insights.py",
     "📝 Feedback": "feedback.py",
     "📚 About": "about.py",
-    "🪄 Advanced Insights": "advanced_insights.py",  # New page added
+    "🪄 Advanced Insights": "advanced insights.py",  # New page added
 }
 
 def load_page(page_file):
