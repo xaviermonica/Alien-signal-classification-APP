@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
 from scipy import stats
-
+from statsmodels.formula.api import ols
+import statsmodels.api as sm
 st.title("📊 Advanced Data Analysis of Narrowband Signals")
 
 # Load the narrowband signals data
