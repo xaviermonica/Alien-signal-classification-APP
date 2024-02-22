@@ -144,6 +144,10 @@ else:
     st.error("Please select at least two columns for PCA.")
 
 # ---- ANOVA (Analysis of Variance) ----
+from statsmodels.formula.api import ols
+import statsmodels.api as sm
+
+# ---- ANOVA (Analysis of Variance) ----
 st.write("### ANOVA: Analysis of Variance by 'Stars Type'")
 anova_columns = st.multiselect(
     "Choose a feature for ANOVA (dependent variable):",
@@ -151,11 +155,10 @@ anova_columns = st.multiselect(
 )
 
 if anova_columns:
-    from statsmodels.formula.api import ols
-    import statsmodels.api as sm
-
     for col in anova_columns:
-        model = ols(f'{col} ~ C(`Stars Type`)', data=data).fit()
+        # Use proper column name formatting
+        formula = f'{col} ~ C(Stars_Type)'
+        model = ols(formula, data=data).fit()
         anova_table = sm.stats.anova_lm(model, typ=2)
         st.write(f"#### ANOVA Results for {col}")
         st.write(anova_table)
