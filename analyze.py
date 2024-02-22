@@ -1,160 +1,198 @@
 import streamlit as st
 import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import plotly.express as px
+from scipy import stats
 
-# Set page configuration with attractive layout
+st.title("📊 Advanced Data Analysis of Narrowband Signals")
 
-# Custom CSS for a modern, attractive design with animations
-st.markdown("""
-    <style>
-    /* Set background for app */
-    .reportview-container {
-        background: linear-gradient(135deg, #c9eaff, #ffffff);
-        color: black;
-        font-family: 'Helvetica', sans-serif;
-    }
+# Load the narrowband signals data
+data = pd.read_csv("narrowband signals.csv")
 
-    /* Style sidebar background */
-    .sidebar .sidebar-content {
-        background-color: #dde9f0;
-        border-right: 2px solid #a7c6db;
-        color: black;
-    }
+# Display the dataset
+st.write("### Dataset Overview")
+st.dataframe(data.describe())
 
-    /* Style headings with bold and color */
-    h1, h2, h3, h4, h5, h6 {
-        color: #9cd4f0;
-        font-weight: 700;
-        font-family: 'Arial', sans-serif;
-    }
+# ---- Descriptive Statistics ----
+st.write("### Descriptive Statistics")
+if st.checkbox("Show Descriptive Statistics"):
+    st.write(data.describe(include='all'))
 
-    /* Style buttons with smooth hover animations */
-    .stButton>button {
-        background-color: #005f73;
-        color: white;
-        border-radius: 10px;
-        font-size: 18px;
-        padding: 10px;
-        transition: background-color 0.3s ease;
-    }
-    .stButton>button:hover {
-        background-color: #0a9396;
-        transform: scale(1.05);
-    }
+# ---- Missing Data Analysis ----
+st.write("### Missing Data Analysis")
+missing_data = data.isnull().sum().sort_values(ascending=False)
+missing_data = missing_data[missing_data > 0]
 
-    /* Add box shadow to DataFrame */
-    .stDataFrame {
-        border-radius: 10px;
-        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Style text input and multiselect for better user experience */
-    .stTextInput>div>input, .stMultiSelect>div {
-        background-color: #f0f4f8;
-        border-radius: 10px;
-        padding: 10px;
-    }
-
-    /* Highlight table cells */
-    .highlight-cell {
-        animation: highlight 1s ease;
-    }
-
-    @keyframes highlight {
-        0% { background-color: #dff9fb; }
-        100% { background-color: transparent; }
-    }
-    </style>
-    """, unsafe_allow_html=True)
-
-# Title with a modern look and emoji
-st.title("📊🌟 Advanced Data Analysis Dashboard")
-
-# Introductory text with cleaner Markdown formatting
-st.markdown("""
-    ### Welcome to the **Advanced Data Analysis** section! 🎉
-    Here's what you can explore:
-    - 📊 Perform detailed **statistical analysis**.
-    - 🔗 Visualize **correlations** and **distributions**.
-    - 🧠 Run custom **Pandas code** to gain more insights.
-    ---
-""")
-
-# Sidebar section for file upload with emoji and smooth interaction
-st.sidebar.header("📂 Upload Your Dataset")
-uploaded_file = st.sidebar.file_uploader("Choose a CSV file to begin your analysis", type=["csv"])
-
-# If a file is uploaded
-if uploaded_file is not None:
-    try:
-        # Load data and display it with animations
-        data = pd.read_csv(uploaded_file)
-        st.subheader("🔍 Dataset Overview")
-        st.write(f"📏 **Rows and Columns**: {data.shape[0]} rows, {data.shape[1]} columns")
-        
-        st.write("🔎 **Data Preview:**")
-        st.dataframe(data.head(10))  # Show the first 10 rows
-
-        # Add cool summary statistics with better styling and emojis
-        if st.checkbox("📊 Show Statistical Summary", value=True):
-            styled_df = data.describe().T.style.format("{:.2f}").background_gradient(cmap="coolwarm")
-            st.write(styled_df)
-        
-        # Filter numeric columns for correlation heatmap
-        numeric_columns = data.select_dtypes(include=['float64', 'int64']).columns.tolist()
-
-        if numeric_columns:
-            st.subheader("📈 Correlation Heatmap 🔗")
-            selected_columns = st.multiselect("🎯 Select numeric features for correlation analysis", numeric_columns, default=numeric_columns)
-
-            if len(selected_columns) > 1:
-                corr = data[selected_columns].corr()
-                mask = np.triu(np.ones_like(corr, dtype=bool))  # Mask to show only one triangle of the heatmap
-                
-                # Plot correlation heatmap
-                fig, ax = plt.subplots(figsize=(12, 8))
-                sns.heatmap(corr, annot=True, cmap='coolwarm', mask=mask, ax=ax, linewidths=0.5, cbar_kws={"shrink": 0.75})
-                ax.set_title("💡 Correlation Heatmap", fontsize=18)
-                st.pyplot(fig)
-            else:
-                st.warning("⚠️ Please select at least two numeric features for correlation.")
-        else:
-            st.warning("⚠️ No numeric columns available for correlation analysis.")
-        
-        # Add interactive distribution analysis with smooth visuals
-        st.subheader("🔬 Explore Feature Distribution")
-        selected_feature = st.selectbox("📊 Select a feature for analysis", data.columns)
-
-        # Numeric and categorical feature-based plots
-        if pd.api.types.is_numeric_dtype(data[selected_feature]):
-            fig, ax = plt.subplots()
-            sns.histplot(data[selected_feature], kde=True, ax=ax, color="#0077b6")
-            ax.set_title(f"📊 Distribution of {selected_feature}", fontsize=15)
-            st.pyplot(fig)
-        else:
-            fig, ax = plt.subplots()
-            sns.countplot(x=data[selected_feature], ax=ax, palette="Set2")
-            ax.set_title(f"📊 Count Plot of {selected_feature}", fontsize=15)
-            plt.xticks(rotation=45)
-            st.pyplot(fig)
-
-        # Allow custom Pandas code execution with enhanced styling
-        st.sidebar.subheader("📝 Custom Analysis Tool")
-        custom_code = st.sidebar.text_area("✍️ Write your custom Pandas code:", "data.head()")
-
-        st.subheader("🛠️ Custom Code Output")
-        try:
-            result = eval(custom_code)
-            if isinstance(result, pd.DataFrame):
-                st.dataframe(result)  # Display DataFrame with better UI
-            else:
-                st.write(result)
-        except Exception as e:
-            st.error(f"❌ Error in custom code: {e}")
-
-    except Exception as e:
-        st.error(f"❌ Error loading the dataset: {e}")
+if not missing_data.empty:
+    fig, ax = plt.subplots()
+    sns.barplot(x=missing_data.index, y=missing_data.values, palette='flare', ax=ax)
+    ax.set_title('Missing Data by Feature', fontsize=16)
+    ax.set_ylabel('Number of Missing Values', fontsize=14)
+    plt.xticks(rotation=45)
+    st.pyplot(fig)
 else:
-    st.info("📂 Please upload a CSV dataset to get started.")
+    st.success("No missing data found!")
+
+# ---- Data Distribution & Skewness ----
+st.write("### Data Distribution & Skewness")
+distribution_columns = st.multiselect(
+    "Choose columns to check distribution and skewness:",
+    ['brightpixel', 'narrowband', 'narrowbanddrd', 'noise', 'Signal Frequency(MHz)', 'Signal Duration(seconds)'],
+    default=['brightpixel', 'narrowband']
+)
+
+if distribution_columns:
+    for col in distribution_columns:
+        st.write(f"#### Distribution of {col}")
+        fig, ax = plt.subplots()
+        sns.histplot(data[col], kde=True, color='teal', ax=ax)
+        ax.set_title(f'Distribution of {col}', fontsize=16)
+        st.pyplot(fig)
+
+        # Calculate skewness
+        skewness = stats.skew(data[col].dropna())
+        st.write(f"Skewness of {col}: **{skewness:.2f}**")
+else:
+    st.error("Please select at least one column to analyze distribution and skewness.")
+
+# ---- Outliers Detection ----
+st.write("### Outliers Detection (Z-Score Method)")
+outlier_columns = st.multiselect(
+    "Choose columns to detect outliers:",
+    ['brightpixel', 'narrowband', 'narrowbanddrd', 'noise', 'Signal Frequency(MHz)', 'Signal Duration(seconds)'],
+    default=['brightpixel', 'narrowband']
+)
+
+threshold = st.slider("Set Z-Score Threshold:", 1.5, 5.0, 3.0)
+
+if outlier_columns:
+    for col in outlier_columns:
+        z_scores = np.abs(stats.zscore(data[col].dropna()))
+        outliers = data[col][z_scores > threshold]
+        st.write(f"#### {col}: {len(outliers)} outliers found")
+        if not outliers.empty:
+            st.write(outliers)
+else:
+    st.error("Please select at least one column for outlier detection.")
+
+# ---- Correlation Analysis ----
+st.write("### Correlation Matrix with Statistical Significance")
+correlation_columns = st.multiselect(
+    "Choose columns for correlation analysis:",
+    ['brightpixel', 'narrowband', 'narrowbanddrd', 'noise', 'Signal Frequency(MHz)', 'Signal Duration(seconds)'],
+    default=['brightpixel', 'narrowband', 'narrowbanddrd']
+)
+
+if len(correlation_columns) >= 2:
+    st.write(f"#### Correlation Matrix for {', '.join(correlation_columns)}")
+    corr_matrix = data[correlation_columns].corr()
+    fig, ax = plt.subplots(figsize=(12, 8))
+    sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', ax=ax, linewidths=.5)
+    ax.set_title('Correlation Matrix', fontsize=16)
+    st.pyplot(fig)
+
+    st.write("#### P-Values Matrix")
+    p_values_matrix = pd.DataFrame(np.zeros(corr_matrix.shape), columns=corr_matrix.columns, index=corr_matrix.index)
+    for row in correlation_columns:
+        for col in correlation_columns:
+            p_value = stats.pearsonr(data[row].dropna(), data[col].dropna())[1]
+            p_values_matrix.loc[row, col] = p_value
+    st.write(p_values_matrix)
+else:
+    st.error("Please select at least two columns for correlation analysis.")
+
+# ---- Hypothesis Testing (T-Test) ----
+st.write("### Hypothesis Testing: T-Test Between Features")
+t_test_columns = st.multiselect(
+    "Choose two columns for T-Test:",
+    ['brightpixel', 'narrowband', 'narrowbanddrd', 'noise', 'Signal Frequency(MHz)', 'Signal Duration(seconds)']
+)
+
+if len(t_test_columns) == 2:
+    t_stat, p_val = stats.ttest_ind(data[t_test_columns[0]].dropna(), data[t_test_columns[1]].dropna())
+    st.write(f"**T-Test Result**: T-Statistic = {t_stat:.2f}, P-Value = {p_val:.5f}")
+    if p_val < 0.05:
+        st.success(f"The difference between {t_test_columns[0]} and {t_test_columns[1]} is statistically significant.")
+    else:
+        st.info(f"No significant difference between {t_test_columns[0]} and {t_test_columns[1]}.")
+else:
+    st.error("Please select exactly two columns for the T-Test.")
+
+# ---- PCA (Principal Component Analysis) ----
+st.write("### Principal Component Analysis (PCA)")
+pca_columns = st.multiselect(
+    "Choose columns for PCA:",
+    ['brightpixel', 'narrowband', 'narrowbanddrd', 'noise', 'Signal Frequency(MHz)', 'Signal Duration(seconds)'],
+    default=['brightpixel', 'narrowband', 'narrowbanddrd']
+)
+
+if len(pca_columns) >= 2:
+    from sklearn.decomposition import PCA
+    pca = PCA(n_components=2)
+    pca_result = pca.fit_transform(data[pca_columns].dropna())
+    pca_df = pd.DataFrame(pca_result, columns=['PC1', 'PC2'])
+
+    st.write("#### PCA Results")
+    fig_pca = px.scatter(pca_df, x='PC1', y='PC2', title='PCA Plot')
+    st.plotly_chart(fig_pca)
+
+    st.write(f"Explained Variance Ratio: {pca.explained_variance_ratio_}")
+else:
+    st.error("Please select at least two columns for PCA.")
+
+# ---- ANOVA (Analysis of Variance) ----
+st.write("### ANOVA: Analysis of Variance by 'Stars Type'")
+anova_columns = st.multiselect(
+    "Choose a feature for ANOVA (dependent variable):",
+    ['brightpixel', 'narrowband', 'narrowbanddrd', 'noise', 'Signal Frequency(MHz)', 'Signal Duration(seconds)']
+)
+
+if anova_columns:
+    from statsmodels.formula.api import ols
+    import statsmodels.api as sm
+
+    for col in anova_columns:
+        model = ols(f'{col} ~ C(Stars Type)', data=data).fit()
+        anova_table = sm.stats.anova_lm(model, typ=2)
+        st.write(f"#### ANOVA Results for {col}")
+        st.write(anova_table)
+else:
+    st.error("Please select at least one column for ANOVA analysis.")
+
+# ---- Feature Importance (Random Forest) ----
+st.write("### Feature Importance using Random Forest")
+if st.checkbox("Run Random Forest Feature Importance Analysis"):
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.preprocessing import LabelEncoder
+
+    # Encode 'Stars Type' as target variable
+    label_encoder = LabelEncoder()
+    data['Stars Type Encoded'] = label_encoder.fit_transform(data['Stars Type'])
+
+    X = data.drop(columns=['Stars Type', 'Remarks', 'Stars Type Encoded']).dropna()
+    y = data['Stars Type Encoded'].dropna()
+
+    rf = RandomForestClassifier(n_estimators=100)
+    rf.fit(X, y)
+
+    feature_importance = pd.Series(rf.feature_importances_, index=X.columns).sort_values(ascending=False)
+
+    st.write("#### Feature Importance")
+    fig, ax = plt.subplots()
+    sns.barplot(x=feature_importance.index, y=feature_importance.values, ax=ax, palette='viridis')
+    ax.set_title('Feature Importance from Random Forest', fontsize=16)
+    plt.xticks(rotation=45)
+    st.pyplot(fig)
+
+# ---- Summary & Insights ----
+st.write("### Summary & Key Insights")
+st.write("""
+- Comprehensive statistical analysis reveals key insights into the dataset.
+- Correlation matrix highlights strong linear relationships between various signal properties.
+- PCA helps in reducing dimensionality and identifying principal components.
+- Outlier detection shows where the anomalies are in the dataset.
+- Hypothesis testing indicates statistically significant differences between features.
+- Random Forest ranks feature importance, indicating which features most influence 'Stars Type'.
+""")
