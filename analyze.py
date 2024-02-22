@@ -148,6 +148,10 @@ from statsmodels.formula.api import ols
 import statsmodels.api as sm
 
 # ---- ANOVA (Analysis of Variance) ----
+from statsmodels.formula.api import ols
+import statsmodels.api as sm
+
+# ---- ANOVA (Analysis of Variance) ----
 st.write("### ANOVA: Analysis of Variance by 'Stars Type'")
 anova_columns = st.multiselect(
     "Choose a feature for ANOVA (dependent variable):",
@@ -156,8 +160,8 @@ anova_columns = st.multiselect(
 
 if anova_columns:
     for col in anova_columns:
-        # Use proper column name formatting
-        formula = f'{col} ~ C(Stars_Type)'
+        # Correctly reference column with spaces
+        formula = f'{col} ~ C(`Stars Type`)'
         model = ols(formula, data=data).fit()
         anova_table = sm.stats.anova_lm(model, typ=2)
         st.write(f"#### ANOVA Results for {col}")
