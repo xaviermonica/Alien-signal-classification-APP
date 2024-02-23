@@ -83,19 +83,28 @@ if st.button("Apply Filter"):
 st.write("### Data Aggregation and Grouping")
 group_by_column = st.selectbox("Choose column to group by:", data.columns)
 agg_function = st.selectbox("Choose aggregation function:", ["Mean", "Sum", "Median", "Count"])
-if st.button("Apply Aggregation"):
-    if agg_function == "Mean":
-        grouped_data = data.groupby(group_by_column).mean()
-    elif agg_function == "Sum":
-        grouped_data = data.groupby(group_by_column).sum()
-    elif agg_function == "Median":
-        grouped_data = data.groupby(group_by_column).median()
-    elif agg_function == "Count":
-        grouped_data = data.groupby(group_by_column).size()
-    
-    st.write(f"#### Aggregated Data by {group_by_column} ({agg_function})")
-    st.dataframe(grouped_data)
 
+if st.button("Apply Aggregation"):
+    try:
+        # Check if the chosen aggregation function is compatible with the column types
+        if agg_function in ["Mean", "Sum", "Median"]:
+            # Convert to numeric if possible, otherwise raise an error
+            data[group_by_column] = pd.to_numeric(data[group_by_column], errors='coerce')
+        
+        if agg_function == "Mean":
+            grouped_data = data.groupby(group_by_column).mean()
+        elif agg_function == "Sum":
+            grouped_data = data.groupby(group_by_column).sum()
+        elif agg_function == "Median":
+            grouped_data = data.groupby(group_by_column).median()
+        elif agg_function == "Count":
+            grouped_data = data.groupby(group_by_column).size()
+        
+        st.write(f"#### Aggregated Data by {group_by_column} ({agg_function})")
+        st.dataframe(grouped_data)
+        
+    except Exception as e:
+        st.error(f"Error performing {agg_function} aggregation: {e}")
 
 # ---- Pairwise Feature Comparison ----
 st.write("### Pairwise Feature Comparison")
