@@ -20,26 +20,6 @@ st.dataframe(data.describe())
 st.write(f"#### Total Rows: {len(data)}")
 st.write(f"#### Total Columns: {len(data.columns)}")
 
-# ---- Data Aggregation and Grouping ----
-st.write("### Data Aggregation and Grouping")
-group_by_column = st.selectbox("Choose column to group by:", data.columns)
-agg_function = st.selectbox("Choose aggregation function:", ["Mean", "Sum", "Median", "Count"])
-if st.button("Apply Aggregation"):
-    try:
-        if agg_function == "Mean":
-            grouped_data = data.groupby(group_by_column).mean()
-        elif agg_function == "Sum":
-            grouped_data = data.groupby(group_by_column).sum()
-        elif agg_function == "Median":
-            grouped_data = data.groupby(group_by_column).median()
-        elif agg_function == "Count":
-            grouped_data = data.groupby(group_by_column).size().reset_index(name='Count')
-
-        st.write(f"#### Aggregated Data by {group_by_column} ({agg_function})")
-        st.dataframe(grouped_data)
-    except Exception as e:
-        st.error(f"Error applying aggregation: {e}")
-
 # ---- Data Distribution ----
 st.write("### Data Distribution")
 distribution_columns = st.multiselect(
@@ -147,23 +127,6 @@ if st.checkbox("Run Random Forest Feature Importance Analysis"):
     except Exception as e:
         st.error(f"Error in Random Forest Analysis: {e}")
 
-# ---- Hypothesis Testing ----
-st.write("### Hypothesis Testing")
-t_test_columns = st.multiselect(
-    "Choose two columns for T-Test:",
-    data.columns
-)
-
-if len(t_test_columns) == 2:
-    t_stat, p_val = stats.ttest_ind(data[t_test_columns[0]].dropna(), data[t_test_columns[1]].dropna())
-    st.write(f"**T-Test Result**: T-Statistic = {t_stat:.2f}, P-Value = {p_val:.5f}")
-    if p_val < 0.05:
-        st.success(f"The difference between {t_test_columns[0]} and {t_test_columns[1]} is statistically significant.")
-    else:
-        st.info(f"No significant difference between {t_test_columns[0]} and {t_test_columns[1]}.")
-else:
-    st.error("Please select exactly two columns for the T-Test.")
-
 # ---- Custom Visualizations ----
 st.write("### Custom Visualizations")
 custom_plot_type = st.selectbox("Choose plot type:", ["Bar Chart", "Line Chart", "Box Plot"])
@@ -195,16 +158,76 @@ elif custom_plot_type == "Box Plot":
         ax.set_title('Box Plot', fontsize=16)
         st.pyplot(fig)
 
+# ---- Advanced Statistical Tests ----
+st.write("### Advanced Statistical Tests")
+
+# Chi-Square Test
+st.write("#### Chi-Square Test")
+chi2_columns = st.multiselect(
+    "Choose two categorical columns for Chi-Square Test:",
+    data.columns
+)
+
+if len(chi2_columns) == 2:
+    contingency_table = pd.crosstab(data[chi2_columns[0]], data[chi2_columns[1]])
+    chi2_stat, p_val, _, _ = stats.chi2_contingency(contingency_table)
+    st.write(f"Chi-Square Statistic: {chi2_stat:.2f}, P-Value: {p_val:.5f}")
+    if p_val < 0.05:
+        st.success("The relationship between the variables is statistically significant.")
+    else:
+        st.info("No significant relationship between the variables.")
+else:
+    st.error("Please select exactly two columns for the Chi-Square Test.")
+
+# Correlation with Target Variable
+st.write("#### Correlation with Target Variable")
+if 'Stars Type' in data.columns:
+    target_col = 'Stars Type'
+    numerical_cols = data.select_dtypes(include=np.number).columns
+    correlation_with_target = data[numerical_cols].corrwith(data[target_col])
+    
+    st.write("#### Correlation with Target Variable")
+    st.bar_chart(correlation_with_target)
+
+# Feature Selection using Recursive Feature Elimination (RFE)
+st.write("### Feature Selection using Recursive Feature Elimination (RFE)")
+if st.checkbox("Run RFE Feature Selection Analysis"):
+    from sklearn.feature_selection import RFE
+    from sklearn.linear_model import LogisticRegression
+
+    try:
+        X = data.drop(columns=['Stars Type', 'Remarks'])
+        y = LabelEncoder().fit_transform(data['Stars Type'])
+
+        model = LogisticRegression()
+        rfe = RFE(model, n_features_to_select=5)
+        fit = rfe.fit(X, y)
+
+        st.write("#### RFE Results")
+        feature_ranking = pd.DataFrame({
+            'Feature': X.columns,
+            'Ranking': fit.ranking_
+        }).sort_values(by='Ranking')
+
+        st.write(feature_ranking)
+        fig, ax = plt.subplots()
+        sns.barplot(x='Feature', y='Ranking', data=feature_ranking, ax=ax, palette='viridis')
+        ax.set_title('Feature Ranking with RFE', fontsize=16)
+        plt.xticks(rotation=45)
+        st.pyplot(fig)
+    except Exception as e:
+        st.error(f"Error in RFE Analysis: {e}")
+
 # ---- Summary & Key Insights ----
 st.write("### Summary & Key Insights")
 st.write("""
-- **Data Aggregation and Grouping**: Allows you to summarize the data by different aggregation functions like mean, sum, median, and count.
-- **Data Distribution**: Visualizes the distribution of selected columns with histograms and density plots.
-- **Data Skewness**: Provides insight into the skewness of data, helping to understand the distribution's asymmetry.
-- **Correlation Analysis**: Shows relationships between selected columns using correlation matrices.
-- **Outlier Detection**: Identifies and displays outliers using the Z-score method.
+- **Data Distribution**: Visualizes how data is distributed across different columns.
+- **Data Skewness**: Measures the asymmetry of data distribution.
+- **Correlation Analysis**: Shows the relationships between selected numerical columns.
+- **Outliers Detection**: Identifies anomalies in selected columns using Z-Score.
 - **Principal Component Analysis (PCA)**: Reduces data dimensionality and visualizes principal components.
-- **Feature Importance**: Ranks features by their importance in predicting the target variable using Random Forest.
-- **Hypothesis Testing**: Compares two columns to test for statistically significant differences using the T-Test.
-- **Custom Visualizations**: Allows users to create bar charts, line charts, and box plots for any columns in the dataset.
+- **Feature Importance**: Ranks features based on their impact on predicting the target variable using Random Forest.
+- **Custom Visualizations**: Provides interactive bar, line, and box plots for selected columns.
+- **Advanced Statistical Tests**: Includes Chi-Square Test for categorical variables and correlation with the target variable.
+- **Feature Selection (RFE)**: Uses Recursive Feature Elimination to rank features based on their importance.
 """)
