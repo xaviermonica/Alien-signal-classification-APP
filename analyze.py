@@ -79,6 +79,78 @@ if st.button("Apply Filter"):
     st.write("Filtered Dataset Overview")
     st.dataframe(filtered_data.describe())
 
+# ---- Data Aggregation and Grouping ----
+st.write("### Data Aggregation and Grouping")
+group_by_column = st.selectbox("Choose column to group by:", data.columns)
+agg_function = st.selectbox("Choose aggregation function:", ["Mean", "Sum", "Median", "Count"])
+if st.button("Apply Aggregation"):
+    if agg_function == "Mean":
+        grouped_data = data.groupby(group_by_column).mean()
+    elif agg_function == "Sum":
+        grouped_data = data.groupby(group_by_column).sum()
+    elif agg_function == "Median":
+        grouped_data = data.groupby(group_by_column).median()
+    elif agg_function == "Count":
+        grouped_data = data.groupby(group_by_column).size()
+    
+    st.write(f"#### Aggregated Data by {group_by_column} ({agg_function})")
+    st.dataframe(grouped_data)
+
+
+# ---- Pairwise Feature Comparison ----
+st.write("### Pairwise Feature Comparison")
+comparison_columns = st.multiselect(
+    "Choose columns for pairwise comparison:",
+    ['brightpixel', 'narrowband', 'narrowbanddrd', 'noise', 'Signal Frequency(MHz)', 'Signal Duration(seconds)']
+)
+
+if len(comparison_columns) > 1:
+    st.write("#### Pairwise Scatter Plots")
+    for i in range(len(comparison_columns)):
+        for j in range(i + 1, len(comparison_columns)):
+            fig = px.scatter(data, x=comparison_columns[i], y=comparison_columns[j], color='Stars Type', title=f"{comparison_columns[i]} vs {comparison_columns[j]}")
+            st.plotly_chart(fig)
+else:
+    st.error("Please select more than one column for pairwise comparison.")
+
+
+# ---- Time Series Analysis ----
+st.write("### Time Series Analysis")
+time_column = st.selectbox("Choose time column:", [col for col in data.columns if 'time' in col.lower()])
+value_column = st.selectbox("Choose value column:", [col for col in data.columns if col != time_column])
+
+if time_column and value_column:
+    data[time_column] = pd.to_datetime(data[time_column], errors='coerce')
+    fig, ax = plt.subplots()
+    data.plot(x=time_column, y=value_column, ax=ax)
+    ax.set_title(f'Time Series of {value_column}')
+    st.pyplot(fig)
+else:
+    st.error("Please select both time and value columns for time series analysis.")
+
+
+# ---- Clustering Analysis ----
+st.write("### Clustering Analysis")
+from sklearn.cluster import KMeans
+
+clustering_columns = st.multiselect(
+    "Choose columns for clustering:",
+    ['brightpixel', 'narrowband', 'narrowbanddrd', 'noise', 'Signal Frequency(MHz)', 'Signal Duration(seconds)']
+)
+n_clusters = st.slider("Choose number of clusters:", 2, 10, 3)
+
+if len(clustering_columns) > 1:
+    st.write("#### K-Means Clustering")
+    kmeans = KMeans(n_clusters=n_clusters)
+    clusters = kmeans.fit_predict(data[clustering_columns].dropna())
+    data['Cluster'] = np.nan
+    data.loc[data[clustering_columns].dropna().index, 'Cluster'] = clusters
+    
+    fig = px.scatter(data, x=clustering_columns[0], y=clustering_columns[1], color='Cluster', title=f'K-Means Clustering with {n_clusters} Clusters')
+    st.plotly_chart(fig)
+else:
+    st.error("Please select more than one column for clustering.")
+
 
 
 # ---- Save and Download Processed Data ----
@@ -222,6 +294,30 @@ if st.checkbox("Run Random Forest Feature Importance Analysis"):
     ax.set_title('Feature Importance from Random Forest', fontsize=16)
     plt.xticks(rotation=45)
     st.pyplot(fig)
+
+
+# ---- Machine Learning Model Training ----
+st.write("### Machine Learning Model Training")
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report
+
+target_column = st.selectbox("Choose target column:", ['Stars Type'])
+features = st.multiselect("Choose feature columns:", [col for col in data.columns if col != target_column])
+
+if len(features) > 0 and target_column:
+    X = data[features].dropna()
+    y = data[target_column].dropna()
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    
+    from sklearn.ensemble import RandomForestClassifier
+    model = RandomForestClassifier(n_estimators=100)
+    model.fit(X_train, y_train)
+    predictions = model.predict(X_test)
+    
+    st.write("#### Model Performance")
+    st.text(classification_report(y_test, predictions))
+else:
+    st.error("Please select feature and target columns for model training.")
 
 # ---- Summary & Insights ----
 st.write("### Summary & Key Insights")
