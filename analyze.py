@@ -36,6 +36,58 @@ if not missing_data.empty:
 else:
     st.success("No missing data found!")
 
+
+# ---- Data Cleaning ----
+st.write("### Data Cleaning")
+if st.checkbox("Show Data Cleaning Options"):
+    st.write("#### Handle Missing Values")
+    missing_action = st.selectbox("Choose action for missing values:", ["None", "Drop", "Fill"])
+    if missing_action == "Drop":
+        data = data.dropna()
+    elif missing_action == "Fill":
+        fill_value = st.text_input("Enter value to fill missing data:", "0")
+        data = data.fillna(fill_value)
+    
+    st.write("#### Remove Duplicates")
+    if st.checkbox("Remove duplicate rows"):
+        data = data.drop_duplicates()
+    
+    st.write("Updated Dataset Overview")
+    st.dataframe(data.describe())
+
+
+
+# ---- Feature Engineering ----
+st.write("### Feature Engineering")
+feature_name = st.text_input("Enter new feature name:")
+if st.button("Create New Feature"):
+    # Example: Creating a new feature as the sum of 'brightpixel' and 'narrowband'
+    if 'brightpixel' in data.columns and 'narrowband' in data.columns:
+        data[feature_name] = data['brightpixel'] + data['narrowband']
+        st.write(f"New feature '{feature_name}' created.")
+    st.write("Updated Dataset Overview")
+    st.dataframe(data.describe())
+
+
+
+# ---- Custom Data Filters ----
+st.write("### Custom Data Filters")
+filter_column = st.selectbox("Choose column to filter:", data.columns)
+filter_value = st.text_input(f"Enter value for {filter_column}:")
+if st.button("Apply Filter"):
+    filtered_data = data[data[filter_column].astype(str).str.contains(filter_value, na=False)]
+    st.write("Filtered Dataset Overview")
+    st.dataframe(filtered_data.describe())
+
+
+
+# ---- Save and Download Processed Data ----
+st.write("### Save and Download Processed Data")
+if st.button("Download Processed Data"):
+    processed_data_path = "processed_data.csv"
+    data.to_csv(processed_data_path, index=False)
+    st.markdown(f"[Download processed data](./{processed_data_path})")
+
 # ---- Data Distribution & Skewness ----
 st.write("### Data Distribution & Skewness")
 distribution_columns = st.multiselect(
@@ -143,31 +195,8 @@ if len(pca_columns) >= 2:
 else:
     st.error("Please select at least two columns for PCA.")
 
-# ---- ANOVA (Analysis of Variance) ----
-from statsmodels.formula.api import ols
-import statsmodels.api as sm
 
 # ---- ANOVA (Analysis of Variance) ----
-from statsmodels.formula.api import ols
-import statsmodels.api as sm
-
-# ---- ANOVA (Analysis of Variance) ----
-st.write("### ANOVA: Analysis of Variance by 'Stars Type'")
-anova_columns = st.multiselect(
-    "Choose a feature for ANOVA (dependent variable):",
-    ['brightpixel', 'narrowband', 'narrowbanddrd', 'noise', 'Signal Frequency(MHz)', 'Signal Duration(seconds)']
-)
-
-if anova_columns:
-    for col in anova_columns:
-        # Correctly reference column with spaces
-        formula = f'{col} ~ C(`Stars Type`)'
-        model = ols(formula, data=data).fit()
-        anova_table = sm.stats.anova_lm(model, typ=2)
-        st.write(f"#### ANOVA Results for {col}")
-        st.write(anova_table)
-else:
-    st.error("Please select at least one column for ANOVA analysis.")
 
 # ---- Feature Importance (Random Forest) ----
 st.write("### Feature Importance using Random Forest")
