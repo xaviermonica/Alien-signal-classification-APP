@@ -135,9 +135,20 @@ if custom_plot_type == "Bar Chart":
     bar_x = st.selectbox("Choose X-axis column for Bar Chart:", data.columns)
     bar_y = st.selectbox("Choose Y-axis column for Bar Chart:", data.columns)
     if st.button("Generate Bar Chart"):
-        fig, ax = plt.subplots()
+        fig, ax = plt.subplots(figsize=(10, 6))
+
+        # Plot the bar chart
         sns.barplot(x=bar_x, y=bar_y, data=data, ax=ax, palette='pastel')
-        ax.set_title('Bar Chart', fontsize=16)
+
+        # Set the title and labels
+        ax.set_title('Bar Chart', fontsize=16, color='blue')
+        ax.set_xlabel(bar_x, fontsize=14)
+        ax.set_ylabel(bar_y, fontsize=14)
+
+        # Adjust x-ticks for better readability
+        if data[bar_x].dtype == 'int64' or data[bar_x].dtype == 'float64':
+            plt.xticks(rotation=45, ha='right')
+
         st.pyplot(fig)
 
 elif custom_plot_type == "Line Chart":
