@@ -22,7 +22,7 @@ Our mission is to provide an intuitive and powerful platform for signal classifi
 _Aspiring AI Ops Engineer with a passion for advanced machine learning solutions_
 
 **Niki**  
-_Your AI Assistant, powered by ChatGPT, dedicated to enhancing your user experience_
+_AI Assistant, powered by ChatGPT, dedicated to enhancing  user experience_
 
 We are dedicated to continually refining the application to meet your evolving needs. Explore the full potential of signal classification with our innovative tool and make data-driven decisions with confidence.
 
