@@ -5,12 +5,12 @@ st.markdown("""
     <style>
     .about-title {
         font-size: 2em;
-        color: #4A90E2;
+        color: #0056A0; /* Dark blue for better contrast */
         text-align: center;
         margin-bottom: 20px;
     }
     .about-section {
-        background-color: #F7F9FC;
+        background-color: #F4F4F9; /* Light gray background */
         border-radius: 10px;
         padding: 20px;
         margin: 10px 0;
@@ -19,21 +19,21 @@ st.markdown("""
     .feature-list {
         list-style-type: disc;
         margin-left: 20px;
-        color: #333;
+        color: #333; /* Dark gray for better readability */
     }
     .highlight {
-        color: #E94E77;
+        color: #D9534F; /* Red color for emphasis */
         font-weight: bold;
     }
     .developer-info {
-        background-color: #E1F5FE;
+        background-color: #E8F4F8; /* Light blue background */
         border-radius: 10px;
         padding: 15px;
         margin: 10px 0;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
     .contact {
-        background-color: #FFF3E0;
+        background-color: #F9F5F0; /* Light beige background */
         border-radius: 10px;
         padding: 15px;
         margin: 10px 0;
