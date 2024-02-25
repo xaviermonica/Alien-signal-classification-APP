@@ -3,67 +3,56 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
+import plotly.express as px
+from scipy import stats
 
 # Set page configuration with an attractive layout
+st.set_page_config(page_title="Advanced Data Analysis Dashboard", layout="wide")
 
-# Custom CSS for a modern, attractive design with animations
+# Custom CSS for a modern, advanced design
 st.markdown("""
     <style>
-    /* Set background for app */
     .reportview-container {
-        background: linear-gradient(135deg, #e0f7fa, #ffffff);
+        background: linear-gradient(135deg, #c9eaff, #ffffff);
         color: black;
         font-family: 'Helvetica', sans-serif;
     }
-
-    /* Style sidebar background */
     .sidebar .sidebar-content {
-        background-color: #e3f2fd;
-        border-right: 2px solid #90caf9;
+        background-color: #dde9f0;
+        border-right: 2px solid #a7c6db;
         color: black;
     }
-
-    /* Style headings with bold and color */
     h1, h2, h3, h4, h5, h6 {
-        color: #64b5f6;
+        color: #9cd4f0;
         font-weight: 700;
         font-family: 'Arial', sans-serif;
     }
-
-    /* Style buttons with smooth hover animations */
     .stButton>button {
-        background-color: #0277bd;
+        background-color: #005f73;
         color: white;
         border-radius: 10px;
         font-size: 18px;
         padding: 10px;
-        transition: background-color 0.3s ease;
+        transition: background-color 0.3s ease, transform 0.3s ease;
     }
     .stButton>button:hover {
-        background-color: #01579b;
+        background-color: #0a9396;
         transform: scale(1.05);
     }
-
-    /* Add box shadow to DataFrame */
     .stDataFrame {
         border-radius: 10px;
         box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
     }
-
-    /* Style text input and multiselect for better user experience */
     .stTextInput>div>input, .stMultiSelect>div {
-        background-color: #e1f5fe;
+        background-color: #f0f4f8;
         border-radius: 10px;
         padding: 10px;
     }
-
-    /* Highlight table cells */
     .highlight-cell {
         animation: highlight 1s ease;
     }
-
     @keyframes highlight {
-        0% { background-color: #b3e5fc; }
+        0% { background-color: #dff9fb; }
         100% { background-color: transparent; }
     }
     </style>
@@ -75,10 +64,11 @@ st.title("📊🌟 Advanced Data Analysis Dashboard")
 # Introductory text with cleaner Markdown formatting
 st.markdown("""
     ### Welcome to the **Advanced Data Analysis** section! 🎉
-    Here's what you can explore:
-    - 📊 Perform detailed **statistical analysis**.
-    - 🔗 Visualize **correlations** and **distributions**.
-    - 🧠 Run custom **Pandas code** to gain more insights.
+    Explore the following features:
+    - 📊 **Statistical Analysis**: Gain insights from summary statistics.
+    - 🔗 **Correlation Analysis**: Visualize relationships between features.
+    - 🔍 **Feature Distribution**: Explore data distributions and custom visualizations.
+    - 🛠️ **Custom Analysis Tool**: Execute custom Pandas code for deeper insights.
     ---
 """)
 
@@ -86,14 +76,12 @@ st.markdown("""
 st.sidebar.header("📂 Upload Your Dataset")
 uploaded_file = st.sidebar.file_uploader("Choose a CSV file to begin your analysis", type=["csv"])
 
-# If a file is uploaded
 if uploaded_file is not None:
     try:
         # Load data and display it with animations
         data = pd.read_csv(uploaded_file)
         st.subheader("🔍 Dataset Overview")
         st.write(f"📏 **Rows and Columns**: {data.shape[0]} rows, {data.shape[1]} columns")
-        
         st.write("🔎 **Data Preview:**")
         st.dataframe(data.head(10))  # Show the first 10 rows
 
@@ -127,10 +115,9 @@ if uploaded_file is not None:
         st.subheader("🔬 Explore Feature Distribution")
         selected_feature = st.selectbox("📊 Select a feature for analysis", data.columns)
 
-        # Numeric and categorical feature-based plots
         if pd.api.types.is_numeric_dtype(data[selected_feature]):
             fig, ax = plt.subplots()
-            sns.histplot(data[selected_feature], kde=True, ax=ax, color="#0288d1")
+            sns.histplot(data[selected_feature], kde=True, ax=ax, color="#0077b6")
             ax.set_title(f"📊 Distribution of {selected_feature}", fontsize=15)
             st.pyplot(fig)
         else:
