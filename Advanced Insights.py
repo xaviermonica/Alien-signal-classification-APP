@@ -4,35 +4,36 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Set page configuration with attractive layout
+# Set page configuration with an attractive layout
+st.set_page_config(page_title="Advanced Data Analysis", layout="wide")
 
 # Custom CSS for a modern, attractive design with animations
 st.markdown("""
     <style>
     /* Set background for app */
     .reportview-container {
-        background: linear-gradient(135deg, #c9eaff, #ffffff);
+        background: linear-gradient(135deg, #e0f7fa, #ffffff);
         color: black;
         font-family: 'Helvetica', sans-serif;
     }
 
     /* Style sidebar background */
     .sidebar .sidebar-content {
-        background-color: #dde9f0;
-        border-right: 2px solid #a7c6db;
+        background-color: #e3f2fd;
+        border-right: 2px solid #90caf9;
         color: black;
     }
 
     /* Style headings with bold and color */
     h1, h2, h3, h4, h5, h6 {
-        color: #9cd4f0;
+        color: #64b5f6;
         font-weight: 700;
         font-family: 'Arial', sans-serif;
     }
 
     /* Style buttons with smooth hover animations */
     .stButton>button {
-        background-color: #005f73;
+        background-color: #0277bd;
         color: white;
         border-radius: 10px;
         font-size: 18px;
@@ -40,7 +41,7 @@ st.markdown("""
         transition: background-color 0.3s ease;
     }
     .stButton>button:hover {
-        background-color: #0a9396;
+        background-color: #01579b;
         transform: scale(1.05);
     }
 
@@ -52,7 +53,7 @@ st.markdown("""
 
     /* Style text input and multiselect for better user experience */
     .stTextInput>div>input, .stMultiSelect>div {
-        background-color: #f0f4f8;
+        background-color: #e1f5fe;
         border-radius: 10px;
         padding: 10px;
     }
@@ -63,7 +64,7 @@ st.markdown("""
     }
 
     @keyframes highlight {
-        0% { background-color: #dff9fb; }
+        0% { background-color: #b3e5fc; }
         100% { background-color: transparent; }
     }
     </style>
@@ -130,7 +131,7 @@ if uploaded_file is not None:
         # Numeric and categorical feature-based plots
         if pd.api.types.is_numeric_dtype(data[selected_feature]):
             fig, ax = plt.subplots()
-            sns.histplot(data[selected_feature], kde=True, ax=ax, color="#0077b6")
+            sns.histplot(data[selected_feature], kde=True, ax=ax, color="#0288d1")
             ax.set_title(f"📊 Distribution of {selected_feature}", fontsize=15)
             st.pyplot(fig)
         else:
