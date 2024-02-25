@@ -24,7 +24,7 @@ def main():
     st.markdown("""
         <style>
         .header {
-            background-color: #1f77b4; /* Blue */
+            background-color: #133247; /* Blue */
             padding: 10px;
             text-align: center;
             color: white;
