@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Set page configuration with an attractive layout
-st.set_page_config(page_title="Advanced Data Analysis", layout="wide")
 
 # Custom CSS for a modern, attractive design with animations
 st.markdown("""
