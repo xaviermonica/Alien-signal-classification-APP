@@ -56,7 +56,7 @@ def main():
         .footer {
             padding: 10px;
             text-align: center;
-            background-color: #f0f0f0;
+            background-color: #a11515;
             border-top: 1px solid #ddd;
             color: #333;
         }
