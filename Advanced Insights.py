@@ -7,7 +7,6 @@ import plotly.express as px
 from scipy import stats
 
 # Set page configuration with an attractive layout
-st.set_page_config(page_title="Advanced Data Analysis Dashboard", layout="wide")
 
 # Custom CSS for a modern, advanced design
 st.markdown("""
@@ -59,7 +58,7 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # Title with a modern look and emoji
-st.title("📊🌟 Advanced Data Analysis Dashboard")
+st.title("📊 Advanced Data Analysis Dashboard")
 
 # Introductory text with cleaner Markdown formatting
 st.markdown("""
