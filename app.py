@@ -58,7 +58,7 @@ def main():
             text-align: center;
             background-color: #000000;
             border-top: 1px solid #ddd;
-            color: #333;
+            color: #c7bbbb;
         }
         </style>
         <div class="footer">
