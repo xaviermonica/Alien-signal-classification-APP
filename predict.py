@@ -54,7 +54,7 @@ def app():
         st.warning("⚠️ Model is not loaded. Please check the error messages above.")
         return
 
-    st.title("🚀 Predict", anchor="title")
+   
 
     # Sidebar for user input
     st.sidebar.header('🛠️ User Input Parameters')
