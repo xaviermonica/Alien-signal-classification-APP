@@ -34,7 +34,7 @@ def main():
         </style>
         <div class="header">
             <h1>Signal Classification App</h1>
-            <p>Your gateway to analyzing and predicting signals 🚀</p>
+            <p>Your gateway to analyzing and predicting signals</p>
         </div>
     """, unsafe_allow_html=True)
 
